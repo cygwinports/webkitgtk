@@ -1,0 +1,23 @@
+DESCRIPTION="WebKit web browser engine (GTK+ version)"
+HOMEPAGE="http://www.webkit.org/"
+#SRC_URI="http://nightly.webkit.org/files/trunk/src/WebKit-r${PV##*.}.tar.bz2"
+#SRC_DIR="WebKit-r${PV##*.}"
+SRC_URI="http://people.freedesktop.org/~alp/webkit/gtk/${P}.tar.gz"
+PATCH_URI="http://people.freedesktop.org/~alp/webkit/gtk/webkit-cairo-canvas-r34625-for-1.0.1.patch"
+
+PKG_NAMES="${PN} ${PN}-devel"
+PKG_HINTS="setup devel"
+PKG_CONTENTS[0]="usr/bin/ usr/share/"
+PKG_CONTENTS[1]="usr/include/ usr/lib/"
+
+src_compile() {
+	cd ${S}
+	NOCONFIGURE=1 ./autogen.sh || error "autogen.sh failed"
+	cd ${B}
+	cygconf \
+		--with-target=x11 \
+		--enable-video
+	cygmake
+}
+
+DOCS="WebCore/LICENSE-APPLE WebCore/LICENSE-LGPL-2.1"
