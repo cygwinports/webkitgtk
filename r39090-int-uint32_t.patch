@@ -1,0 +1,73 @@
+--- origsrc/WebKit-r39090/JavaScriptCore/interpreter/Interpreter.cpp	2008-12-07 21:56:15.000000000 -0600
++++ src/WebKit-r39090/JavaScriptCore/interpreter/Interpreter.cpp	2008-12-11 00:34:55.471750000 -0600
+@@ -260,7 +260,7 @@
+ 
+     if (rightIsNumber & leftIsString) {
+         RefPtr<UString::Rep> value = JSImmediate::isImmediate(v2) ?
+-            concatenate(asString(v1)->value().rep(), JSImmediate::getTruncatedInt32(v2)) :
++            concatenate(asString(v1)->value().rep(), static_cast<int>(JSImmediate::getTruncatedInt32(v2))) :
+             concatenate(asString(v1)->value().rep(), right);
+ 
+         if (!value)
+@@ -2875,7 +2875,7 @@
+         JSValue* subscript = callFrame[property].jsValue(callFrame);
+ 
+         JSValue* result;
+-        unsigned i;
++        uint32_t i;
+ 
+         bool isUInt32 = JSImmediate::getUInt32(subscript, i);
+         if (LIKELY(isUInt32)) {
+@@ -2917,7 +2917,7 @@
+         JSValue* baseValue = callFrame[base].jsValue(callFrame);
+         JSValue* subscript = callFrame[property].jsValue(callFrame);
+ 
+-        unsigned i;
++        uint32_t i;
+ 
+         bool isUInt32 = JSImmediate::getUInt32(subscript, i);
+         if (LIKELY(isUInt32)) {
+@@ -5137,7 +5137,7 @@
+     JSValue* subscript = ARG_src2;
+ 
+     JSValue* result;
+-    unsigned i;
++    uint32_t i;
+ 
+     bool isUInt32 = JSImmediate::getUInt32(subscript, i);
+     if (LIKELY(isUInt32)) {
+@@ -5233,7 +5233,7 @@
+     JSValue* subscript = ARG_src2;
+     JSValue* value = ARG_src3;
+ 
+-    unsigned i;
++    uint32_t i;
+ 
+     bool isUInt32 = JSImmediate::getUInt32(subscript, i);
+     if (LIKELY(isUInt32)) {
+--- origsrc/WebKit-r39090/WebCore/platform/graphics/GlyphPageTreeNode.cpp	2008-11-24 07:36:41.000000000 -0600
++++ src/WebKit-r39090/WebCore/platform/graphics/GlyphPageTreeNode.cpp	2008-12-10 23:42:48.206125000 -0600
+@@ -201,8 +201,8 @@
+                 GlyphPage* pageToFill = m_page.get();
+                 for (unsigned i = 0; i < numRanges; i++) {
+                     const FontDataRange& range = segmentedFontData->rangeAt(i);
+-                    int from = max(0, range.from() - static_cast<int>(start));
+-                    int to = 1 + min(range.to() - static_cast<int>(start), static_cast<int>(GlyphPage::size) - 1);
++                    int from = max(0, static_cast<int>(range.from() - start));
++                    int to = 1 + min(static_cast<int>(range.to() - start), static_cast<int>(GlyphPage::size) - 1);
+                     if (from < static_cast<int>(GlyphPage::size) && to > 0) {
+                         if (haveGlyphs && !scratchPage) {
+                             scratchPage = GlyphPage::create(this);
+--- origsrc/WebKit-r39090/WebCore/plugins/npfunctions.h	2008-11-20 18:55:31.000000000 -0600
++++ src/WebKit-r39090/WebCore/plugins/npfunctions.h	2008-12-10 22:33:47.721750000 -0600
+@@ -79,8 +79,8 @@
+ typedef NPObject* (*NPN_CreateObjectProcPtr) (NPP, NPClass *aClass);
+ typedef NPObject* (*NPN_RetainObjectProcPtr) (NPObject *obj);
+ typedef void (*NPN_ReleaseObjectProcPtr) (NPObject *obj);
+-typedef bool (*NPN_InvokeProcPtr) (NPP npp, NPObject *obj, NPIdentifier methodName, const NPVariant *args, unsigned argCount, NPVariant *result);
+-typedef bool (*NPN_InvokeDefaultProcPtr) (NPP npp, NPObject *obj, const NPVariant *args, unsigned argCount, NPVariant *result);
++typedef bool (*NPN_InvokeProcPtr) (NPP npp, NPObject *obj, NPIdentifier methodName, const NPVariant *args, uint32_t argCount, NPVariant *result);
++typedef bool (*NPN_InvokeDefaultProcPtr) (NPP npp, NPObject *obj, const NPVariant *args, uint32_t argCount, NPVariant *result);
+ typedef bool (*NPN_EvaluateProcPtr) (NPP npp, NPObject *obj, NPString *script, NPVariant *result);
+ typedef bool (*NPN_GetPropertyProcPtr) (NPP npp, NPObject *obj, NPIdentifier  propertyName, NPVariant *result);
+ typedef bool (*NPN_SetPropertyProcPtr) (NPP npp, NPObject *obj, NPIdentifier  propertyName, const NPVariant *value);

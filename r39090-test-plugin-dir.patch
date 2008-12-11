@@ -1,0 +1,13 @@
+--- origsrc/WebKit-r39090/WebKitTools/GNUmakefile.am	2008-12-04 18:05:34.000000000 -0600
++++ src/WebKit-r39090/WebKitTools/GNUmakefile.am	2008-12-11 10:15:25.034250000 -0600
+@@ -2,7 +2,9 @@
+ 	Programs/GtkLauncher \
+ 	Programs/DumpRenderTree
+ 
+-lib_LTLIBRARIES += \
++mozplugindir = $(libdir)/mozilla/plugins
++
++mozplugin_LTLIBRARIES = \
+ 	TestNetscapePlugin/libtestnetscapeplugin.la
+ 
+ # GtkLauncher

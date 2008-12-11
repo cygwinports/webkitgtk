@@ -1,0 +1,11 @@
+Allow option for autogen not to run configure.
+
+--- origsrc/WebKit-r39090/autogen.sh	2008-04-17 16:37:24.000000000 -0500
++++ src/WebKit-r39090/autogen.sh	2008-12-10 22:46:01.924875000 -0600
+@@ -54,4 +54,6 @@
+ 
+ cd $ORIGDIR || exit 1
+ 
++if test -z "$NOCONFIGURE" ; then
+ $srcdir/configure $AUTOGEN_CONFIGURE_ARGS "$@" || exit $?
++fi

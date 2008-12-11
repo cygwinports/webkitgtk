@@ -1,7 +1,0 @@
-category: Gnome Web
-requires: cygwin webkit atk-devel glib2-devel gstreamer010-devel gstreamer010-plugins-base-devel gtk2-x11-devel libX11-devel libXt-devel libcairo-devel curl-devel libfontconfig-devel libfreetype2-devel libicu-devel gettext libjpeg-devel libpng12-devel libsqlite3-devel libxml2-devel libxslt-devel pango-devel
-external-source: webkit
-sdesc: "GTK+ web browser engine"
-ldesc: "WebKit is an open source web browser engine. WebKit's HTML and 
-JavaScript code began as a branch of the KHTML and KJS libraries from 
-KDE."

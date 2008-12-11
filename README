@@ -1,4 +1,4 @@
-webkit
+webkit1.0
 ------------------------------------------
 WebKit is an open source web browser engine. WebKit's HTML and 
 JavaScript code began as a branch of the KHTML and KJS libraries from 
@@ -6,39 +6,38 @@ KDE.
 
 Runtime requirements:
   cygwin-1.5.25-15
-  atk-1.22.0-1
-  glib2-2.16.3-1
-  gstreamer010-0.10.20-1
-  gstreamer010-plugins-base-0.10.20-1
+  gstreamer010-0.10.21-1
+  gstreamer010-plugins-base-0.10.21-1
   gstreamer010-plugins-gconf
   gstreamer010-plugins-oss
-  gtk2-x11-2.12.10-1
-  libcairo2-1.6.4-1
+  libatk1.0_0-1.24.0-1
+  libcairo2-1.8.4-1
   libcurl4-7.16.3-1
   libfontconfig1-2.6.0-1
   libfreetype26-2.3.7-1
+  libglib2.0_0-2.18.3-1
+  libgtk2.0_0-2.14.5-1
   libicu38-3.8-2
-  libintl8-0.15-1
+  libintl8-0.17-2
   libjpeg62-6b-12
-  libpng12-1.2.29-1
-  libsqlite3_0-3.5.9-1
-  libX11_6-1.1.3-1
-  libxml2-2.6.32-1
-  libxslt-1.1.24-1
-  libXt6-1.0.5-1
-  pango-1.20.3-1
+  libpango1.0_0-1.22.3-1
+  libpng12-1.2.33-1
+  libsqlite3_0-3.6.3-1
+  libX11_6-1.1.5-1
+  libxml2-2.7.2-1
+  libxslt-1.1.24-2
+  libXt6-1.0.5-2
 
 Build requirements:
 (besides corresponding -devel packages)
-  autoconf2.5-2.61-1
-  automake1.10-1.10.1-1
-  binutils-20080523-1
-  cygport-0.3.11-1
+  autoconf2.5-2.63-1
+  automake1.10-1.10.1-2
+  binutils-20080624-2
+  cygport-0.4.3-1
   gawk-3.1.6-1
   gcc-core-3.4.4-3
   gcc-g++-3.4.4-3
-  gnome-common-2.20.0-2
-  libtool-2.2.2-2
+  libtool-2.2.6a-1
   make-3.81-1
   pkg-config-0.23a-2
   sed-4.1.5-2
@@ -47,35 +46,192 @@ Canonical website:
   http://www.webkit.org/
 
 Canonical download:
-  http://people.freedesktop.org/~alp/webkit/gtk/  
   http://nightly.webkit.org/builds/trunk/src/1
 
 -------------------------------------------
 
 Build instructions:
-  unpack webkit-1.0.1-X-src.tar.bz2
+  unpack webkit1.0-1.0.1-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./webkit-1.0.1-X.cygport all
+  cygport ./webkit1.0-1.0.1-X.cygport all
 
 This will create:
-  /usr/src/webkit-1.0.1-X-src.tar.bz2
-  /usr/src/webkit-1.0.1-X.tar.bz2
-  /usr/src/webkit-devel-1.0.1-X.tar.bz2
+  /usr/src/jsc-1.0.1-X.tar.bz2
+  /usr/src/libwebkit1.0-devel-1.0.1-X.tar.bz2
+  /usr/src/libwebkit1.0_1-1.0.1-X.tar.bz2
+  /usr/src/webkit1.0-1.0.1-X-src.tar.bz2
 
 -------------------------------------------
 
 Files included in the binary package:
 
-(webkit)
-  /usr/bin/cygwebkit-1.0-1.dll
+(jsc)
   /usr/bin/jsc.exe
-  /usr/share/doc/webkit-1.0.1/ChangeLog
-  /usr/share/doc/webkit-1.0.1/LICENSE-APPLE
-  /usr/share/doc/webkit-1.0.1/LICENSE-LGPL-2.1
 
-(webkit-devel)
+(libwebkit1.0_1)
+  /usr/bin/cygwebkit-1.0-1.dll
+  /usr/lib/mozilla/plugins/cygtestnetscapeplugin.dll
+  /usr/lib/mozilla/plugins/libtestnetscapeplugin.la
+  /usr/share/doc/webkit1.0-1.0.3.39090/LICENSE-APPLE
+  /usr/share/doc/webkit1.0-1.0.3.39090/LICENSE-LGPL-2.1
+  /usr/share/webkit-1.0/webinspector/Breakpoint.js
+  /usr/share/webkit-1.0/webinspector/BreakpointsSidebarPane.js
+  /usr/share/webkit-1.0/webinspector/CallStackSidebarPane.js
+  /usr/share/webkit-1.0/webinspector/Console.js
+  /usr/share/webkit-1.0/webinspector/DataGrid.js
+  /usr/share/webkit-1.0/webinspector/Database.js
+  /usr/share/webkit-1.0/webinspector/DatabaseQueryView.js
+  /usr/share/webkit-1.0/webinspector/DatabaseTableView.js
+  /usr/share/webkit-1.0/webinspector/DatabasesPanel.js
+  /usr/share/webkit-1.0/webinspector/ElementsPanel.js
+  /usr/share/webkit-1.0/webinspector/ElementsTreeOutline.js
+  /usr/share/webkit-1.0/webinspector/FontView.js
+  /usr/share/webkit-1.0/webinspector/ImageView.js
+  /usr/share/webkit-1.0/webinspector/Images/back.png
+  /usr/share/webkit-1.0/webinspector/Images/checker.png
+  /usr/share/webkit-1.0/webinspector/Images/clearConsoleButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/closeButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/consoleButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/database.png
+  /usr/share/webkit-1.0/webinspector/Images/databaseTable.png
+  /usr/share/webkit-1.0/webinspector/Images/databasesIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/debuggerContinue.png
+  /usr/share/webkit-1.0/webinspector/Images/debuggerPause.png
+  /usr/share/webkit-1.0/webinspector/Images/debuggerStepInto.png
+  /usr/share/webkit-1.0/webinspector/Images/debuggerStepOut.png
+  /usr/share/webkit-1.0/webinspector/Images/debuggerStepOver.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallDown.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallDownBlack.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallDownWhite.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallRight.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallRightBlack.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallRightDown.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallRightDownBlack.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallRightDownWhite.png
+  /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallRightWhite.png
+  /usr/share/webkit-1.0/webinspector/Images/dockButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/elementsIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/enableButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/errorIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/errorMediumIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/excludeButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/focusButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/forward.png
+  /usr/share/webkit-1.0/webinspector/Images/glossyHeader.png
+  /usr/share/webkit-1.0/webinspector/Images/glossyHeaderPressed.png
+  /usr/share/webkit-1.0/webinspector/Images/glossyHeaderSelected.png
+  /usr/share/webkit-1.0/webinspector/Images/glossyHeaderSelectedPressed.png
+  /usr/share/webkit-1.0/webinspector/Images/goArrow.png
+  /usr/share/webkit-1.0/webinspector/Images/graphLabelCalloutLeft.png
+  /usr/share/webkit-1.0/webinspector/Images/graphLabelCalloutRight.png
+  /usr/share/webkit-1.0/webinspector/Images/largerResourcesButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/nodeSearchButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/paneBottomGrow.png
+  /usr/share/webkit-1.0/webinspector/Images/paneBottomGrowActive.png
+  /usr/share/webkit-1.0/webinspector/Images/paneGrowHandleLine.png
+  /usr/share/webkit-1.0/webinspector/Images/pauseOnExceptionButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/percentButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/profileGroupIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/profileIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/profileSmallIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/profilesIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/profilesSilhouette.png
+  /usr/share/webkit-1.0/webinspector/Images/recordButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/reloadButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/resourceCSSIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/resourceDocumentIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/resourceDocumentIconSmall.png
+  /usr/share/webkit-1.0/webinspector/Images/resourceJSIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/resourcePlainIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/resourcePlainIconSmall.png
+  /usr/share/webkit-1.0/webinspector/Images/resourcesIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/resourcesSizeGraphIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/resourcesTimeGraphIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/scriptsIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/scriptsSilhouette.png
+  /usr/share/webkit-1.0/webinspector/Images/searchSmallBlue.png
+  /usr/share/webkit-1.0/webinspector/Images/searchSmallBrightBlue.png
+  /usr/share/webkit-1.0/webinspector/Images/searchSmallGray.png
+  /usr/share/webkit-1.0/webinspector/Images/searchSmallWhite.png
+  /usr/share/webkit-1.0/webinspector/Images/segment.png
+  /usr/share/webkit-1.0/webinspector/Images/segmentEnd.png
+  /usr/share/webkit-1.0/webinspector/Images/segmentHover.png
+  /usr/share/webkit-1.0/webinspector/Images/segmentHoverEnd.png
+  /usr/share/webkit-1.0/webinspector/Images/segmentSelected.png
+  /usr/share/webkit-1.0/webinspector/Images/segmentSelectedEnd.png
+  /usr/share/webkit-1.0/webinspector/Images/splitviewDimple.png
+  /usr/share/webkit-1.0/webinspector/Images/splitviewDividerBackground.png
+  /usr/share/webkit-1.0/webinspector/Images/statusbarBackground.png
+  /usr/share/webkit-1.0/webinspector/Images/statusbarBottomBackground.png
+  /usr/share/webkit-1.0/webinspector/Images/statusbarButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/statusbarMenuButton.png
+  /usr/share/webkit-1.0/webinspector/Images/statusbarMenuButtonSelected.png
+  /usr/share/webkit-1.0/webinspector/Images/statusbarResizerHorizontal.png
+  /usr/share/webkit-1.0/webinspector/Images/statusbarResizerVertical.png
+  /usr/share/webkit-1.0/webinspector/Images/timelineHollowPillBlue.png
+  /usr/share/webkit-1.0/webinspector/Images/timelineHollowPillGray.png
+  /usr/share/webkit-1.0/webinspector/Images/timelineHollowPillGreen.png
+  /usr/share/webkit-1.0/webinspector/Images/timelineHollowPillOrange.png
+  /usr/share/webkit-1.0/webinspector/Images/timelineHollowPillPurple.png
+  /usr/share/webkit-1.0/webinspector/Images/timelineHollowPillRed.png
+  /usr/share/webkit-1.0/webinspector/Images/timelineHollowPillYellow.png
+  /usr/share/webkit-1.0/webinspector/Images/timelinePillBlue.png
+  /usr/share/webkit-1.0/webinspector/Images/timelinePillGray.png
+  /usr/share/webkit-1.0/webinspector/Images/timelinePillGreen.png
+  /usr/share/webkit-1.0/webinspector/Images/timelinePillOrange.png
+  /usr/share/webkit-1.0/webinspector/Images/timelinePillPurple.png
+  /usr/share/webkit-1.0/webinspector/Images/timelinePillRed.png
+  /usr/share/webkit-1.0/webinspector/Images/timelinePillYellow.png
+  /usr/share/webkit-1.0/webinspector/Images/tipBalloon.png
+  /usr/share/webkit-1.0/webinspector/Images/tipBalloonBottom.png
+  /usr/share/webkit-1.0/webinspector/Images/tipIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/tipIconPressed.png
+  /usr/share/webkit-1.0/webinspector/Images/toolbarItemSelected.png
+  /usr/share/webkit-1.0/webinspector/Images/treeDownTriangleBlack.png
+  /usr/share/webkit-1.0/webinspector/Images/treeDownTriangleWhite.png
+  /usr/share/webkit-1.0/webinspector/Images/treeRightTriangleBlack.png
+  /usr/share/webkit-1.0/webinspector/Images/treeRightTriangleWhite.png
+  /usr/share/webkit-1.0/webinspector/Images/treeUpTriangleBlack.png
+  /usr/share/webkit-1.0/webinspector/Images/treeUpTriangleWhite.png
+  /usr/share/webkit-1.0/webinspector/Images/userInputIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/userInputPreviousIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/warningIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/warningMediumIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/warningsErrors.png
+  /usr/share/webkit-1.0/webinspector/MetricsSidebarPane.js
+  /usr/share/webkit-1.0/webinspector/Object.js
+  /usr/share/webkit-1.0/webinspector/ObjectPropertiesSection.js
+  /usr/share/webkit-1.0/webinspector/Panel.js
+  /usr/share/webkit-1.0/webinspector/PanelEnablerView.js
+  /usr/share/webkit-1.0/webinspector/Placard.js
+  /usr/share/webkit-1.0/webinspector/ProfileView.js
+  /usr/share/webkit-1.0/webinspector/ProfilesPanel.js
+  /usr/share/webkit-1.0/webinspector/PropertiesSection.js
+  /usr/share/webkit-1.0/webinspector/PropertiesSidebarPane.js
+  /usr/share/webkit-1.0/webinspector/Resource.js
+  /usr/share/webkit-1.0/webinspector/ResourceCategory.js
+  /usr/share/webkit-1.0/webinspector/ResourceView.js
+  /usr/share/webkit-1.0/webinspector/ResourcesPanel.js
+  /usr/share/webkit-1.0/webinspector/ScopeChainSidebarPane.js
+  /usr/share/webkit-1.0/webinspector/Script.js
+  /usr/share/webkit-1.0/webinspector/ScriptView.js
+  /usr/share/webkit-1.0/webinspector/ScriptsPanel.js
+  /usr/share/webkit-1.0/webinspector/SidebarPane.js
+  /usr/share/webkit-1.0/webinspector/SidebarTreeElement.js
+  /usr/share/webkit-1.0/webinspector/SourceFrame.js
+  /usr/share/webkit-1.0/webinspector/SourceView.js
+  /usr/share/webkit-1.0/webinspector/StylesSidebarPane.js
+  /usr/share/webkit-1.0/webinspector/TextPrompt.js
+  /usr/share/webkit-1.0/webinspector/View.js
+  /usr/share/webkit-1.0/webinspector/inspector.css
+  /usr/share/webkit-1.0/webinspector/inspector.html
+  /usr/share/webkit-1.0/webinspector/inspector.js
+  /usr/share/webkit-1.0/webinspector/treeoutline.js
+  /usr/share/webkit-1.0/webinspector/utilities.js
+
+(libwebkit1.0-devel)
   /usr/include/webkit-1.0/JavaScriptCore/JSBase.h
   /usr/include/webkit-1.0/JavaScriptCore/JSContextRef.h
   /usr/include/webkit-1.0/JavaScriptCore/JSObjectRef.h
@@ -85,6 +241,7 @@ Files included in the binary package:
   /usr/include/webkit-1.0/JavaScriptCore/JSValueRef.h
   /usr/include/webkit-1.0/JavaScriptCore/JavaScript.h
   /usr/include/webkit-1.0/JavaScriptCore/JavaScriptCore.h
+  /usr/include/webkit-1.0/JavaScriptCore/WebKitAvailability.h
   /usr/include/webkit-1.0/webkit/webkit.h
   /usr/include/webkit-1.0/webkit/webkitdefines.h
   /usr/include/webkit-1.0/webkit/webkitenumtypes.h
@@ -93,8 +250,10 @@ Files included in the binary package:
   /usr/include/webkit-1.0/webkit/webkitwebbackforwardlist.h
   /usr/include/webkit-1.0/webkit/webkitwebframe.h
   /usr/include/webkit-1.0/webkit/webkitwebhistoryitem.h
+  /usr/include/webkit-1.0/webkit/webkitwebinspector.h
   /usr/include/webkit-1.0/webkit/webkitwebsettings.h
   /usr/include/webkit-1.0/webkit/webkitwebview.h
+  /usr/include/webkit-1.0/webkit/webkitwebwindowfeatures.h
   /usr/lib/libwebkit-1.0.dll.a
   /usr/lib/libwebkit-1.0.la
   /usr/lib/pkgconfig/webkit-1.0.pc
@@ -102,6 +261,9 @@ Files included in the binary package:
 ------------------
 
 Port Notes:
+
+----- version 1.0.3.39090-1 -----
+Version bump.
 
 ----- version 1.0.1-1 -----
 Version bump.
