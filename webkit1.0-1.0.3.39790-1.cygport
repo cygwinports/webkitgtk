@@ -7,15 +7,14 @@ PATCH_URI="
 	r39090-autogen-noconfigure.patch
 	r39090-no-undefined.patch
 	r39090-platform-cygwin.patch
-	r39090-int-uint32_t.patch
+	r39790-int-uint32_t.patch
 	r39090-jsc-runtime-Collector.patch
 	r39090-min-max.patch
-	r39090-test-plugin-dir.patch
 "
 
 PKG_NAMES="${PN} lib${PN}_1 lib${PN}-devel jsc"
 jsc_CONTENTS="usr/bin/jsc.exe"
-libwebkit1_0_1_CONTENTS="usr/bin/*-1.0-1.dll usr/lib/mozilla/ usr/share/"
+libwebkit1_0_1_CONTENTS="usr/bin/*-1.0-1.dll usr/share/"
 libwebkit1_0_devel_CONTENTS="usr/include/ usr/lib/lib* usr/lib/pkgconfig/"
 
 src_compile() {

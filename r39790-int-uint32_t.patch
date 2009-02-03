@@ -1,6 +1,6 @@
---- origsrc/WebKit-r39090/JavaScriptCore/interpreter/Interpreter.cpp	2008-12-07 21:56:15.000000000 -0600
-+++ src/WebKit-r39090/JavaScriptCore/interpreter/Interpreter.cpp	2008-12-11 00:34:55.471750000 -0600
-@@ -260,7 +260,7 @@
+--- origsrc/WebKit-r39790/JavaScriptCore/interpreter/Interpreter.cpp	2008-12-07 21:56:15.000000000 -0600
++++ src/WebKit-r39790/JavaScriptCore/interpreter/Interpreter.cpp	2009-02-03 00:34:55.471750000 -0600
+@@ -241,7 +241,7 @@
  
      if (rightIsNumber & leftIsString) {
          RefPtr<UString::Rep> value = JSImmediate::isImmediate(v2) ?
@@ -9,36 +9,45 @@
              concatenate(asString(v1)->value().rep(), right);
  
          if (!value)
-@@ -2875,7 +2875,7 @@
-         JSValue* subscript = callFrame[property].jsValue(callFrame);
+@@ -2850,7 +2850,7 @@
+         JSValuePtr subscript = callFrame[property].jsValue(callFrame);
  
-         JSValue* result;
+         JSValuePtr result;
 -        unsigned i;
 +        uint32_t i;
  
          bool isUInt32 = JSImmediate::getUInt32(subscript, i);
          if (LIKELY(isUInt32)) {
-@@ -2917,7 +2917,7 @@
-         JSValue* baseValue = callFrame[base].jsValue(callFrame);
-         JSValue* subscript = callFrame[property].jsValue(callFrame);
+@@ -2894,7 +2894,7 @@
+         JSValuePtr baseValue = callFrame[base].jsValue(callFrame);
+         JSValuePtr subscript = callFrame[property].jsValue(callFrame);
  
 -        unsigned i;
 +        uint32_t i;
  
          bool isUInt32 = JSImmediate::getUInt32(subscript, i);
          if (LIKELY(isUInt32)) {
-@@ -5137,7 +5137,7 @@
-     JSValue* subscript = ARG_src2;
+@@ -2909,7 +2909,7 @@ JSValuePtr Interpreter::privateExecute(E
+                 double dValue = 0;
+                 JSValuePtr jsValue = callFrame[value].jsValue(callFrame);
+                 if (JSImmediate::isNumber(jsValue))
+-                    jsByteArray->setIndex(i, JSImmediate::getTruncatedInt32(jsValue));
++                    jsByteArray->setIndex(i, static_cast<int>(JSImmediate::getTruncatedInt32(jsValue)));
+                 else if (fastIsNumber(jsValue, dValue))
+                     jsByteArray->setIndex(i, dValue);
+                 else
+@@ -5105,7 +5105,7 @@
+     JSValuePtr subscript = ARG_src2;
  
-     JSValue* result;
+     JSValuePtr result;
 -    unsigned i;
 +    uint32_t i;
  
      bool isUInt32 = JSImmediate::getUInt32(subscript, i);
      if (LIKELY(isUInt32)) {
-@@ -5233,7 +5233,7 @@
-     JSValue* subscript = ARG_src2;
-     JSValue* value = ARG_src3;
+@@ -5201,7 +5201,7 @@
+     JSValuePtr subscript = ARG_src2;
+     JSValuePtr value = ARG_src3;
  
 -    unsigned i;
 +    uint32_t i;
