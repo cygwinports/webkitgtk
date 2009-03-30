@@ -5,63 +5,61 @@ JavaScript code began as a branch of the KHTML and KJS libraries from
 KDE.
 
 Runtime requirements:
-  cygwin-1.5.25-15
-  gstreamer010-0.10.21-1
-  gstreamer010-plugins-base-0.10.21-1
-  gstreamer010-plugins-gconf
-  gstreamer010-plugins-oss
-  libatk1.0_0-1.24.0-1
-  libcairo2-1.8.4-1
-  libcurl4-7.16.3-1
-  libfontconfig1-2.6.0-1
-  libfreetype26-2.3.7-1
-  libglib2.0_0-2.18.3-1
-  libgtk2.0_0-2.14.5-1
-  libicu38-3.8-2
-  libintl8-0.17-2
-  libjpeg62-6b-12
-  libpango1.0_0-1.22.3-1
-  libpng12-1.2.33-1
-  libsqlite3_0-3.6.3-1
-  libX11_6-1.1.5-1
-  libxml2-2.7.2-1
-  libxslt-1.1.24-2
-  libXt6-1.0.5-2
+  cygwin-1.7.0-44
+  libatk1.0_0-1.26.0-1
+  libcairo2-1.8.6-10
+  libfontconfig1-2.6.0-10
+  libfreetype6-2.3.9-1
+  libgcc1-4.3.2-2
+  libglib2.0_0-2.20.0-1
+  libgtk2.0_0-2.16.0-1
+  libicu38-3.8-5
+  libintl8-0.17-10
+  libjpeg62-6b-20
+  libpango1.0_0-1.24.0-1
+  libpng12-1.2.35-1
+  libstdc++6-4.3.2-2
+  libsoup2.4_1-2.26.0-1
+  libsqlite3_0-3.6.11-1
+  libX11_6-1.2-10
+  libxml2-2.7.3-10
+  libxslt-1.1.24-10
+  libXt6-1.0.5-10
 
 Build requirements:
 (besides corresponding -devel packages)
-  autoconf2.5-2.63-1
-  automake1.10-1.10.1-2
+  autoconf2.5-2.63-10
+  automake1.10-1.10.1-10
   binutils-20080624-2
-  cygport-0.4.3-1
-  gawk-3.1.6-1
-  gcc-core-3.4.4-3
-  gcc-g++-3.4.4-3
-  libtool-2.2.6a-1
-  make-3.81-1
+  cygport-0.9.6-1
+  gawk-3.1.6-2
+  gcc4-core-4.3.2-2
+  gcc4-g++-4.3.2-2
+  libtool-2.2.7a-11
+  make-3.81-2
   pkg-config-0.23a-2
   sed-4.1.5-2
 
 Canonical website:
-  http://www.webkit.org/
+  http://www.webkitgtk.org/
 
 Canonical download:
-  http://nightly.webkit.org/builds/trunk/src/1
+  http://www.webkitgtk.org/
 
 -------------------------------------------
 
 Build instructions:
-  unpack webkit1.0-1.0.1-X-src.tar.bz2
+  unpack webkit1.0-1.1.3-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./webkit1.0-1.0.1-X.cygport all
+  cygport ./webkit1.0-1.1.3-X.cygport all
 
 This will create:
-  /usr/src/jsc-1.0.1-X.tar.bz2
-  /usr/src/libwebkit1.0-devel-1.0.1-X.tar.bz2
-  /usr/src/libwebkit1.0_1-1.0.1-X.tar.bz2
-  /usr/src/webkit1.0-1.0.1-X-src.tar.bz2
+  /usr/src/jsc-1.1.3-X.tar.bz2
+  /usr/src/libwebkit1.0-devel-1.1.3-X.tar.bz2
+  /usr/src/libwebkit1.0_2-1.1.3-X.tar.bz2
+  /usr/src/webkit1.0-1.1.3-X-src.tar.bz2
 
 -------------------------------------------
 
@@ -70,16 +68,18 @@ Files included in the binary package:
 (jsc)
   /usr/bin/jsc.exe
 
-(libwebkit1.0_1)
-  /usr/bin/cygwebkit-1.0-1.dll
-  /usr/lib/mozilla/plugins/cygtestnetscapeplugin.dll
-  /usr/lib/mozilla/plugins/libtestnetscapeplugin.la
-  /usr/share/doc/webkit1.0-1.0.3.39090/LICENSE-APPLE
-  /usr/share/doc/webkit1.0-1.0.3.39090/LICENSE-LGPL-2.1
+(libwebkit1.0_2)
+  /usr/bin/cygwebkit-1.0-2.dll
+  /usr/share/doc/webkit1.0/ChangeLog
+  /usr/share/doc/webkit1.0/LICENSE-APPLE
+  /usr/share/doc/webkit1.0/LICENSE-LGPL-2.1
   /usr/share/webkit-1.0/webinspector/Breakpoint.js
   /usr/share/webkit-1.0/webinspector/BreakpointsSidebarPane.js
   /usr/share/webkit-1.0/webinspector/CallStackSidebarPane.js
   /usr/share/webkit-1.0/webinspector/Console.js
+  /usr/share/webkit-1.0/webinspector/DOMStorage.js
+  /usr/share/webkit-1.0/webinspector/DOMStorageDataGrid.js
+  /usr/share/webkit-1.0/webinspector/DOMStorageItemsView.js
   /usr/share/webkit-1.0/webinspector/DataGrid.js
   /usr/share/webkit-1.0/webinspector/Database.js
   /usr/share/webkit-1.0/webinspector/DatabaseQueryView.js
@@ -112,6 +112,7 @@ Files included in the binary package:
   /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallRightDownWhite.png
   /usr/share/webkit-1.0/webinspector/Images/disclosureTriangleSmallRightWhite.png
   /usr/share/webkit-1.0/webinspector/Images/dockButtons.png
+  /usr/share/webkit-1.0/webinspector/Images/domStorage.png
   /usr/share/webkit-1.0/webinspector/Images/elementsIcon.png
   /usr/share/webkit-1.0/webinspector/Images/enableButtons.png
   /usr/share/webkit-1.0/webinspector/Images/errorIcon.png
@@ -197,6 +198,7 @@ Files included in the binary package:
   /usr/share/webkit-1.0/webinspector/Images/treeUpTriangleWhite.png
   /usr/share/webkit-1.0/webinspector/Images/userInputIcon.png
   /usr/share/webkit-1.0/webinspector/Images/userInputPreviousIcon.png
+  /usr/share/webkit-1.0/webinspector/Images/userInputResultIcon.png
   /usr/share/webkit-1.0/webinspector/Images/warningIcon.png
   /usr/share/webkit-1.0/webinspector/Images/warningMediumIcon.png
   /usr/share/webkit-1.0/webinspector/Images/warningsErrors.png
@@ -244,13 +246,17 @@ Files included in the binary package:
   /usr/include/webkit-1.0/JavaScriptCore/WebKitAvailability.h
   /usr/include/webkit-1.0/webkit/webkit.h
   /usr/include/webkit-1.0/webkit/webkitdefines.h
+  /usr/include/webkit-1.0/webkit/webkitdownload.h
   /usr/include/webkit-1.0/webkit/webkitenumtypes.h
   /usr/include/webkit-1.0/webkit/webkitnetworkrequest.h
+  /usr/include/webkit-1.0/webkit/webkitsoupauthdialog.h
   /usr/include/webkit-1.0/webkit/webkitversion.h
   /usr/include/webkit-1.0/webkit/webkitwebbackforwardlist.h
   /usr/include/webkit-1.0/webkit/webkitwebframe.h
   /usr/include/webkit-1.0/webkit/webkitwebhistoryitem.h
   /usr/include/webkit-1.0/webkit/webkitwebinspector.h
+  /usr/include/webkit-1.0/webkit/webkitwebnavigationaction.h
+  /usr/include/webkit-1.0/webkit/webkitwebpolicydecision.h
   /usr/include/webkit-1.0/webkit/webkitwebsettings.h
   /usr/include/webkit-1.0/webkit/webkitwebview.h
   /usr/include/webkit-1.0/webkit/webkitwebwindowfeatures.h
@@ -262,14 +268,8 @@ Files included in the binary package:
 
 Port Notes:
 
------ version 1.0.3.39090-1 -----
-Version bump.
-
------ version 1.0.1-1 -----
-Version bump.
-
------ version 0.1.34279-1 -----
-Initial release for Cygwin.
+----- version 1.1.3-1 -----
+Initial release for Cygwin 1.7.
 
 
 Cygwin port maintained by:

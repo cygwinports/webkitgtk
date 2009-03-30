@@ -1,0 +1,38 @@
+min and max are defined as macros in <X11/Xlibint.h>, and interfere
+with their usage in namespace std:: or as variable names.
+
+--- origsrc/webkit-1.1.3/JavaScriptCore/parser/Nodes.cpp	2009-03-01 13:49:22.000000000 -0600
++++ src/webkit-1.1.3/JavaScriptCore/parser/Nodes.cpp	2009-03-29 12:46:40.218750000 -0500
+@@ -46,6 +46,9 @@
+ #include <wtf/RefCountedLeakCounter.h>
+ #include <wtf/Threading.h>
+ 
++#undef min
++#undef max
++
+ using namespace WTF;
+ 
+ namespace JSC {
+--- origsrc/webkit-1.1.3/JavaScriptCore/profiler/CallIdentifier.h	2008-12-20 07:16:47.000000000 -0600
++++ src/webkit-1.1.3/JavaScriptCore/profiler/CallIdentifier.h	2009-03-29 12:40:26.906250000 -0500
+@@ -29,6 +29,8 @@
+ 
+ #include <runtime/UString.h>
+ 
++#undef max
++
+ namespace JSC {
+ 
+     struct CallIdentifier {
+--- origsrc/webkit-1.1.3/JavaScriptCore/runtime/DateMath.cpp	2009-03-14 03:13:56.000000000 -0500
++++ src/webkit-1.1.3/JavaScriptCore/runtime/DateMath.cpp	2009-03-29 12:47:24.734375000 -0500
+@@ -72,6 +72,9 @@
+ #include <strings.h>
+ #endif
+ 
++#undef min
++#undef max
++
+ using namespace WTF;
+ 
+ namespace JSC {
