@@ -1,3 +1,5 @@
+inherit gnome2
+
 DESCRIPTION="WebKit web browser engine (GTK+ version)"
 HOMEPAGE="http://www.webkitgtk.org/"
 #SRC_URI="http://nightly.webkit.org/files/trunk/src/WebKit-r${PV##*.}.tar.bz2"
@@ -16,10 +18,27 @@ PATCH_URI="
 
 PKG_NAMES="${PN} lib${PN}_2 lib${PN}-devel jsc"
 jsc_CONTENTS="usr/bin/jsc.exe"
-libwebkit1_0_2_CONTENTS="usr/bin/*-1.0-2.dll usr/share/"
-libwebkit1_0_devel_CONTENTS="usr/include/ usr/lib/lib* usr/lib/pkgconfig/"
+libwebkit1_0_2_CONTENTS="--exclude=gtk-doc usr/bin/*-1.0-2.dll usr/share/"
+libwebkit1_0_devel_CONTENTS="usr/include/ usr/lib/lib* usr/lib/pkgconfig/ usr/share/gtk-doc/"
 
 ACLOCAL_FLAGS="-I autotools"
 CYGCONF_ARGS="--with-target=x11 --disable-jit"
+
+src_compile() {
+	cd ${S}
+	gnome2_autoreconf
+	cd ${B}
+	gnome2_compile
+	# gtk-doc
+	ln -sf ${B}/WebKit/gtk/docs/version.xml ${S}/WebKit/gtk/docs/
+	cygmake -C WebKit/gtk/docs
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	# gtk-doc
+	cyginstall -C WebKit/gtk/docs
+}
 
 DOCS="WebCore/LICENSE-APPLE WebCore/LICENSE-LGPL-2.1"
