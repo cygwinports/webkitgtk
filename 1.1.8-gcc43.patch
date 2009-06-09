@@ -1,0 +1,15 @@
+First argument is const, but a static_cast doesn't work:
+
+error: invalid static_cast from type 'const UChar*' to type 'const gunichar2*'
+
+--- origsrc/webkit-1.1.8/WebKit/gtk/WebCoreSupport/EditorClientGtk.cpp	2009-05-22 01:15:17.000000000 -0500
++++ src/webkit-1.1.8/WebKit/gtk/WebCoreSupport/EditorClientGtk.cpp	2009-06-09 00:11:31.132055000 -0500
+@@ -586,7 +586,7 @@ void EditorClient::learnWord(const Strin
+ 
+ void EditorClient::checkSpellingOfString(const UChar* text, int length, int* misspellingLocation, int* misspellingLength)
+ {
+-    gchar* ctext = g_utf16_to_utf8(const_cast<gunichar2*>(text), length, 0, 0, 0);
++    gchar* ctext = g_utf16_to_utf8(reinterpret_cast<const gunichar2*>(text), length, 0, 0, 0);
+     int utflen = g_utf8_strlen(ctext, -1);
+ 
+     PangoLanguage* language = pango_language_get_default();

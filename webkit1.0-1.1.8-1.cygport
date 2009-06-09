@@ -13,16 +13,19 @@ PATCH_URI="
 	1.1.3-dolt.patch
 	1.1.3-min-max.patch
 	1.1.3-no-undefined.patch
-	1.1.3-dllexport.patch
+	1.1.8-dllexport.patch
+	1.1.8-gcc43.patch
+	1.1.8-vpath.patch
 "
 
-PKG_NAMES="${PN} lib${PN}_2 lib${PN}-devel jsc"
+PKG_NAMES="${PN} lib${PN}_2 lib${PN}-common lib${PN}-devel jsc"
 jsc_CONTENTS="usr/bin/jsc.exe"
-libwebkit1_0_2_CONTENTS="--exclude=gtk-doc usr/bin/*-1.0-2.dll usr/share/"
+libwebkit1_0_2_CONTENTS="usr/bin/cygwebkit-1.0-2.dll"
+libwebkit1_0_common_CONTENTS="--exclude=gtk-doc usr/share/"
 libwebkit1_0_devel_CONTENTS="usr/include/ usr/lib/lib* usr/lib/pkgconfig/ usr/share/gtk-doc/"
 
 ACLOCAL_FLAGS="-I autotools"
-CYGCONF_ARGS="--with-target=x11 --disable-jit"
+CYGCONF_ARGS="--with-target=x11 --enable-gtk-doc"
 
 src_compile() {
 	cd ${S}
@@ -31,7 +34,7 @@ src_compile() {
 	gnome2_compile
 	# gtk-doc
 	ln -sf ${B}/WebKit/gtk/docs/version.xml ${S}/WebKit/gtk/docs/
-	cygmake -C WebKit/gtk/docs
+	cygmake -j1 -C WebKit/gtk/docs
 }
 
 src_install() {

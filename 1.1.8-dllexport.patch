@@ -1,0 +1,63 @@
+--- origsrc/webkit-1.1.8/JavaScriptCore/API/JSBase.h	2009-05-13 01:45:11.000000000 -0500
++++ src/webkit-1.1.8/JavaScriptCore/API/JSBase.h	2009-06-09 00:49:53.418394000 -0500
+@@ -67,9 +67,7 @@ typedef struct OpaqueJSValue* JSObjectRe
+ #undef JS_EXPORT
+ #if defined(BUILDING_WX__)
+     #define JS_EXPORT
+-#elif defined(__GNUC__)
+-    #define JS_EXPORT __attribute__((visibility("default")))
+-#elif defined(WIN32) || defined(_WIN32)
++#elif defined(WIN32) || defined(_WIN32) || defined(__CYGWIN__)
+     /*
+      * TODO: Export symbols with JS_EXPORT when using MSVC.
+      * See http://bugs.webkit.org/show_bug.cgi?id=16227
+@@ -79,6 +77,8 @@ typedef struct OpaqueJSValue* JSObjectRe
+     #else
+     #define JS_EXPORT __declspec(dllimport)
+     #endif
++#elif defined(__GNUC__) && __GNUC__ >= 4
++    #define JS_EXPORT __attribute__((visibility("default")))
+ #else
+     #define JS_EXPORT
+ #endif
+--- origsrc/webkit-1.1.8/JavaScriptCore/GNUmakefile.am	2009-05-28 03:12:50.000000000 -0500
++++ src/webkit-1.1.8/JavaScriptCore/GNUmakefile.am	2009-06-09 00:49:44.963265100 -0500
+@@ -1,4 +1,5 @@
+ javascriptcore_cppflags += \
++	-DBUILDING_JavaScriptCore \
+ 	-I$(srcdir)/JavaScriptCore \
+ 	-I$(srcdir)/JavaScriptCore/API \
+ 	-I$(srcdir)/JavaScriptCore/ForwardingHeaders \
+--- origsrc/webkit-1.1.8/JavaScriptCore/jit/JITStubs.cpp	2009-05-27 11:32:36.000000000 -0500
++++ src/webkit-1.1.8/JavaScriptCore/jit/JITStubs.cpp	2009-06-09 00:56:15.178977600 -0500
+@@ -71,7 +71,7 @@ COMPILE_ASSERT(offsetof(struct JITStackF
+ COMPILE_ASSERT(offsetof(struct JITStackFrame, code) == 0x30, JITStackFrame_code_offset_matches_ctiTrampoline);
+ COMPILE_ASSERT(offsetof(struct JITStackFrame, savedEBX) == 0x1c, JITStackFrame_stub_argument_space_matches_ctiTrampoline);
+ 
+-#if PLATFORM(DARWIN) || PLATFORM(WIN_OS)
++#if PLATFORM(DARWIN) || PLATFORM(WIN_OS) || PLATFORM(CYGWIN)
+ #define SYMBOL_STRING(name) "_" #name
+ #else
+ #define SYMBOL_STRING(name) #name
+--- origsrc/webkit-1.1.8/WebKit/gtk/webkit/webkitdefines.h	2009-03-03 14:20:45.000000000 -0600
++++ src/webkit-1.1.8/WebKit/gtk/webkit/webkitdefines.h	2009-06-08 22:01:44.362519000 -0500
+@@ -23,7 +23,7 @@
+ 
+ #include <glib.h>
+ 
+-#ifdef G_OS_WIN32
++#ifdef G_PLATFORM_WIN32
+     #ifdef BUILDING_WEBKIT
+         #define WEBKIT_API __declspec(dllexport)
+     #else
+--- origsrc/webkit-1.1.8/autotools/webkit.m4	2009-05-22 15:50:26.000000000 -0500
++++ src/webkit-1.1.8/autotools/webkit.m4	2009-06-08 22:01:44.366269100 -0500
+@@ -13,7 +13,7 @@ dnl check if we have the required packag
+ dnl
+ # check for -fvisibility=hidden compiler support (GCC >= 4)
+ saved_CFLAGS="$CFLAGS"
+-CFLAGS="$CFLAGS -fvisibility=hidden -fvisibility-inlines-hidden"
++CFLAGS="$CFLAGS -Werror -fvisibility=hidden -fvisibility-inlines-hidden"
+ AC_MSG_CHECKING([if ${CXX} supports -fvisibility=hidden -fvisibility-inlines-hidden])
+ AC_COMPILE_IFELSE([char foo;],
+       [ AC_MSG_RESULT([yes])

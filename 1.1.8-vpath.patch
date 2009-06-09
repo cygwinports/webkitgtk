@@ -1,0 +1,27 @@
+--- origsrc/webkit-1.1.8/GNUmakefile.am	2009-06-08 21:59:09.070146200 -0500
++++ src/webkit-1.1.8/GNUmakefile.am	2009-06-09 12:38:59.962155600 -0500
+@@ -488,7 +488,7 @@ EXTRA_DIST = \
+ # extra resource files
+ resourcesdir = ${datadir}/webkit-1.0/resources
+ dist_resources_DATA = \
+-	$(shell ls $(srcdir)/WebKit/gtk/resources/*.html)
++	$(wildcard $(srcdir)/WebKit/gtk/resources/*.html)
+ 
+ # END WEBKIT GTK+
+ 
+--- origsrc/webkit-1.1.8/WebCore/GNUmakefile.am	2009-05-28 03:12:50.000000000 -0500
++++ src/webkit-1.1.8/WebCore/GNUmakefile.am	2009-06-09 13:13:17.034104800 -0500
+@@ -3214,11 +3214,11 @@ webcore_dist += \
+ webinspectordir = ${datadir}/webkit-1.0/webinspector
+ dist_webinspector_DATA = \
+ 	$(WebCore)/English.lproj/localizedStrings.js \
+-	$(shell ls $(WebCore)/inspector/front-end/*.{js,html,css})
++	$(wildcard $(WebCore)/inspector/front-end/*.*)
+ 
+ webinspectorimagesdir = ${datadir}/webkit-1.0/webinspector/Images
+ dist_webinspectorimages_DATA = \
+-	$(shell ls $(WebCore)/inspector/front-end/Images/*.png)
++	$(wildcard $(WebCore)/inspector/front-end/Images/*.png)
+ 
+ webresourcesdir = ${datadir}/webkit-1.0/images
+ dist_webresources_DATA = \

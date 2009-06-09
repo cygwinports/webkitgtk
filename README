@@ -5,21 +5,24 @@ JavaScript code began as a branch of the KHTML and KJS libraries from
 KDE.
 
 Runtime requirements:
-  cygwin-1.7.0-45
+  cygwin-1.7.0-48
   libatk1.0_0-1.26.0-1
   libcairo2-1.8.6-10
+  libenchant1-1.4.2-10
   libfontconfig1-2.6.0-10
   libfreetype6-2.3.9-1
   libgcc1-4.3.2-2
-  libglib2.0_0-2.20.1-1
-  libgtk2.0_0-2.16.1-1
+  libglib2.0_0-2.20.3-1
+  libgstreamer0.10_0-0.10.23-1
+  libgstvideo0.10_0-0.10.23-1
+  libgtk2.0_0-2.16.2-1
   libicu38-3.8-5
   libintl8-0.17-10
   libjpeg62-6b-20
-  libpango1.0_0-1.24.1-1
+  libpango1.0_0-1.24.2-1
   libpng12-1.2.35-1
   libstdc++6-4.3.2-2
-  libsoup2.4_1-2.26.0-1
+  libsoup2.4_1-2.26.2-1
   libsqlite3_0-3.6.11-1
   libX11_6-1.2-10
   libxml2-2.7.3-10
@@ -29,13 +32,13 @@ Runtime requirements:
 Build requirements:
 (besides corresponding -devel packages)
   autoconf2.5-2.63-10
-  automake1.10-1.10.1-10
+  automake1.10-1.10.2-10
   binutils-20080624-2
   cygport-0.9.6-1
   gawk-3.1.6-2
   gcc4-core-4.3.2-2
   gcc4-g++-4.3.2-2
-  gnome-common-2.26.0-1
+  gnome-common-2.26.0-2
   gtk-doc-1.11-2
   libtool-2.2.7a-12
   make-3.81-2
@@ -51,17 +54,18 @@ Canonical download:
 -------------------------------------------
 
 Build instructions:
-  unpack webkit1.0-1.1.5-X-src.tar.bz2
+  unpack webkit1.0-1.1.8-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./webkit1.0-1.1.5-X.cygport all
+  cygport ./webkit1.0-1.1.8-X.cygport all
 
 This will create:
-  /usr/src/jsc-1.1.5-X.tar.bz2
-  /usr/src/libwebkit1.0-devel-1.1.5-X.tar.bz2
-  /usr/src/libwebkit1.0_2-1.1.5-X.tar.bz2
-  /usr/src/webkit1.0-1.1.5-X-src.tar.bz2
+  /usr/src/jsc-1.1.8-X.tar.bz2
+  /usr/src/libwebkit1.0-common-1.1.8-X.tar.bz2
+  /usr/src/libwebkit1.0-devel-1.1.8-X.tar.bz2
+  /usr/src/libwebkit1.0_2-1.1.8-X.tar.bz2
+  /usr/src/webkit1.0-1.1.8-X-src.tar.bz2
 
 -------------------------------------------
 
@@ -72,10 +76,24 @@ Files included in the binary package:
 
 (libwebkit1.0_2)
   /usr/bin/cygwebkit-1.0-2.dll
+
+(libwebkit1.0-common)
   /usr/share/doc/webkit1.0/ChangeLog
   /usr/share/doc/webkit1.0/LICENSE-APPLE
   /usr/share/doc/webkit1.0/LICENSE-LGPL-2.1
   /usr/share/locale/de/LC_MESSAGES/webkit.mo
+  /usr/share/locale/it/LC_MESSAGES/webkit.mo
+  /usr/share/locale/pt_BR/LC_MESSAGES/webkit.mo
+  /usr/share/locale/ru/LC_MESSAGES/webkit.mo
+  /usr/share/locale/sv/LC_MESSAGES/webkit.mo
+  /usr/share/webkit-1.0/images/deleteButton.png
+  /usr/share/webkit-1.0/images/missingImage.png
+  /usr/share/webkit-1.0/images/nullPlugin.png
+  /usr/share/webkit-1.0/images/panIcon.png
+  /usr/share/webkit-1.0/images/textAreaResizeCorner.png
+  /usr/share/webkit-1.0/images/urlIcon.png
+  /usr/share/webkit-1.0/resources/error.html
+  /usr/share/webkit-1.0/webinspector/BottomUpProfileDataGridTree.js
   /usr/share/webkit-1.0/webinspector/Breakpoint.js
   /usr/share/webkit-1.0/webinspector/BreakpointsSidebarPane.js
   /usr/share/webkit-1.0/webinspector/CallStackSidebarPane.js
@@ -211,6 +229,7 @@ Files included in the binary package:
   /usr/share/webkit-1.0/webinspector/Panel.js
   /usr/share/webkit-1.0/webinspector/PanelEnablerView.js
   /usr/share/webkit-1.0/webinspector/Placard.js
+  /usr/share/webkit-1.0/webinspector/ProfileDataGridTree.js
   /usr/share/webkit-1.0/webinspector/ProfileView.js
   /usr/share/webkit-1.0/webinspector/ProfilesPanel.js
   /usr/share/webkit-1.0/webinspector/PropertiesSection.js
@@ -229,10 +248,12 @@ Files included in the binary package:
   /usr/share/webkit-1.0/webinspector/SourceView.js
   /usr/share/webkit-1.0/webinspector/StylesSidebarPane.js
   /usr/share/webkit-1.0/webinspector/TextPrompt.js
+  /usr/share/webkit-1.0/webinspector/TopDownProfileDataGridTree.js
   /usr/share/webkit-1.0/webinspector/View.js
   /usr/share/webkit-1.0/webinspector/inspector.css
   /usr/share/webkit-1.0/webinspector/inspector.html
   /usr/share/webkit-1.0/webinspector/inspector.js
+  /usr/share/webkit-1.0/webinspector/localizedStrings.js
   /usr/share/webkit-1.0/webinspector/treeoutline.js
   /usr/share/webkit-1.0/webinspector/utilities.js
 
@@ -251,6 +272,7 @@ Files included in the binary package:
   /usr/include/webkit-1.0/webkit/webkitdefines.h
   /usr/include/webkit-1.0/webkit/webkitdownload.h
   /usr/include/webkit-1.0/webkit/webkitenumtypes.h
+  /usr/include/webkit-1.0/webkit/webkiterror.h
   /usr/include/webkit-1.0/webkit/webkitnetworkrequest.h
   /usr/include/webkit-1.0/webkit/webkitsoupauthdialog.h
   /usr/include/webkit-1.0/webkit/webkitversion.h
@@ -277,6 +299,9 @@ Files included in the binary package:
   /usr/share/gtk-doc/html/webkitgtk/index-1.1.3.html
   /usr/share/gtk-doc/html/webkitgtk/index-1.1.4.html
   /usr/share/gtk-doc/html/webkitgtk/index-1.1.5.html
+  /usr/share/gtk-doc/html/webkitgtk/index-1.1.6.html
+  /usr/share/gtk-doc/html/webkitgtk/index-1.1.7.html
+  /usr/share/gtk-doc/html/webkitgtk/index-1.1.8.html
   /usr/share/gtk-doc/html/webkitgtk/index-all.html
   /usr/share/gtk-doc/html/webkitgtk/index-deprecated.html
   /usr/share/gtk-doc/html/webkitgtk/index.html
@@ -304,6 +329,9 @@ Files included in the binary package:
 ------------------
 
 Port Notes:
+
+----- version 1.1.8-1 -----
+Version bump.
 
 ----- version 1.1.5-1 -----
 Version bump.
