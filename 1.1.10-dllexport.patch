@@ -1,21 +1,19 @@
 --- origsrc/webkit-1.1.8/JavaScriptCore/API/JSBase.h	2009-05-13 01:45:11.000000000 -0500
 +++ src/webkit-1.1.8/JavaScriptCore/API/JSBase.h	2009-06-09 00:49:53.418394000 -0500
-@@ -67,9 +67,7 @@ typedef struct OpaqueJSValue* JSObjectRe
+@@ -67,8 +67,6 @@ typedef struct OpaqueJSValue* JSObjectRe
  #undef JS_EXPORT
  #if defined(BUILDING_WX__)
      #define JS_EXPORT
 -#elif defined(__GNUC__)
 -    #define JS_EXPORT __attribute__((visibility("default")))
--#elif defined(WIN32) || defined(_WIN32)
-+#elif defined(WIN32) || defined(_WIN32) || defined(__CYGWIN__)
+ #elif defined(WIN32) || defined(_WIN32)
      /*
       * TODO: Export symbols with JS_EXPORT when using MSVC.
-      * See http://bugs.webkit.org/show_bug.cgi?id=16227
 @@ -79,6 +77,8 @@ typedef struct OpaqueJSValue* JSObjectRe
      #else
      #define JS_EXPORT __declspec(dllimport)
      #endif
-+#elif defined(__GNUC__) && __GNUC__ >= 4
++#elif defined(__GNUC__) && __GNUC__ >= 4 && !defined(__CYGWIN__)
 +    #define JS_EXPORT __attribute__((visibility("default")))
  #else
      #define JS_EXPORT
@@ -61,3 +59,85 @@
  AC_MSG_CHECKING([if ${CXX} supports -fvisibility=hidden -fvisibility-inlines-hidden])
  AC_COMPILE_IFELSE([char foo;],
        [ AC_MSG_RESULT([yes])
+--- origsrc/webkit-1.1.10/JavaScriptCore/config.h	2009-06-08 06:56:59.000000000 -0500
++++ src/webkit-1.1.10/JavaScriptCore/config.h	2009-06-18 00:58:17.152371300 -0500
+@@ -25,7 +25,7 @@
+ 
+ #include <wtf/Platform.h>
+ 
+-#if PLATFORM(WIN_OS) && !defined(BUILDING_WX__) && !COMPILER(GCC)
++#if (PLATFORM(WIN_OS) || PLATFORM(CYGWIN)) && !defined(BUILDING_WX__)
+ #if defined(BUILDING_JavaScriptCore) || defined(BUILDING_WTF)
+ #define JS_EXPORTDATA __declspec(dllexport)
+ #else
+@@ -35,22 +35,20 @@
+ #define JS_EXPORTDATA
+ #endif
+ 
+-#if PLATFORM(WIN_OS)
+-
++#if PLATFORM(WIN_OS) || PLATFORM(CYGWIN)
+ // If we don't define these, they get defined in windef.h. 
+ // We want to use std::min and std::max
+ #define max max
+ #define min min
++#endif
+ 
+-#if !COMPILER(MSVC7) && !PLATFORM(WIN_CE)
++#if PLATFORM(WIN_OS) && !COMPILER(MSVC7) && !PLATFORM(WIN_CE)
+ // We need to define this before the first #include of stdlib.h or it won't contain rand_s.
+ #ifndef _CRT_RAND_S
+ #define _CRT_RAND_S
+ #endif
+ #endif
+ 
+-#endif
+-
+ #if PLATFORM(FREEBSD) || PLATFORM(OPENBSD)
+ #define HAVE_PTHREAD_NP_H 1
+ #endif
+--- origsrc/webkit-1.1.10/WebCore/config.h	2009-06-08 06:57:05.000000000 -0500
++++ src/webkit-1.1.10/WebCore/config.h	2009-06-18 00:59:39.562380500 -0500
+@@ -24,7 +24,7 @@
+ 
+ #include <wtf/Platform.h>
+ 
+-#if PLATFORM(WIN_OS) && !defined(BUILDING_WX__) && !COMPILER(GCC)
++#if (PLATFORM(WIN_OS) || PLATFORM(CYGWIN)) && !defined(BUILDING_WX__)
+ #if defined(BUILDING_JavaScriptCore) || defined(BUILDING_WTF)
+ #define JS_EXPORTDATA __declspec(dllexport)
+ #else
+@@ -46,6 +46,17 @@
+ #define HAVE_FUNC_USLEEP 1
+ #endif /* __APPLE__ */
+ 
++#if PLATFORM(WIN_OS) || PLATFORM(CYGWIN)
++// If we don't define these, they get defined in windef.h.
++// We want to use std::min and std::max.
++#ifndef max
++#define max max
++#endif
++#ifndef min
++#define min min
++#endif
++#endif
++
+ #if PLATFORM(WIN_OS)
+ 
+ #ifndef _WIN32_WINNT
+@@ -56,15 +67,6 @@
+ #define WINVER 0x0500
+ #endif
+ 
+-// If we don't define these, they get defined in windef.h.
+-// We want to use std::min and std::max.
+-#ifndef max
+-#define max max
+-#endif
+-#ifndef min
+-#define min min
+-#endif
+-
+ // CURL needs winsock, so don't prevent inclusion of it
+ #if !USE(CURL)
+ #ifndef _WINSOCKAPI_

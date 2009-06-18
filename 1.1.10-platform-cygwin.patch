@@ -1,5 +1,5 @@
---- origsrc/WebKit-r39090/JavaScriptCore/API/JSStringRef.h	2008-11-24 07:35:23.000000000 -0600
-+++ src/WebKit-r39090/JavaScriptCore/API/JSStringRef.h	2008-12-10 22:36:28.206125000 -0600
+--- origsrc/webkit-1.1.10/JavaScriptCore/API/JSStringRef.h	2008-06-17 13:17:45.000000000 -0500
++++ src/webkit-1.1.10/JavaScriptCore/API/JSStringRef.h	2009-06-17 22:26:34.748257000 -0500
 @@ -37,7 +37,7 @@
  extern "C" {
  #endif
@@ -9,9 +9,9 @@
  /*!
  @typedef JSChar
  @abstract A Unicode character.
---- origsrc/WebKit-r39090/JavaScriptCore/runtime/DateMath.h	2008-11-24 07:35:25.000000000 -0600
-+++ src/WebKit-r39090/JavaScriptCore/runtime/DateMath.h	2008-12-10 22:29:41.378000000 -0600
-@@ -113,7 +113,7 @@
+--- origsrc/webkit-1.1.10/JavaScriptCore/wtf/DateMath.h	2009-06-09 07:10:42.000000000 -0500
++++ src/webkit-1.1.10/JavaScriptCore/wtf/DateMath.h	2009-06-17 22:26:36.094527600 -0500
+@@ -109,7 +109,7 @@ struct GregorianDateTime : Noncopyable {
          , year(inTm.tm_year)
          , isDST(inTm.tm_isdst)
      {
@@ -20,7 +20,7 @@
          utcOffset = static_cast<int>(inTm.tm_gmtoff);
  
          int inZoneSize = strlen(inTm.tm_zone) + 1;
-@@ -140,7 +140,7 @@
+@@ -136,7 +136,7 @@ struct GregorianDateTime : Noncopyable {
          ret.tm_year  =  year;
          ret.tm_isdst =  isDST;
  
@@ -29,10 +29,10 @@
          ret.tm_gmtoff = static_cast<long>(utcOffset);
          ret.tm_zone = timeZone;
  #endif
---- origsrc/WebKit-r39090/JavaScriptCore/wtf/Platform.h	2008-12-04 22:38:13.000000000 -0600
-+++ src/WebKit-r39090/JavaScriptCore/wtf/Platform.h	2008-12-10 22:28:31.534250000 -0600
-@@ -42,6 +42,13 @@
- #define WTF_PLATFORM_DARWIN 1
+--- origsrc/webkit-1.1.10/JavaScriptCore/wtf/Platform.h	2009-06-09 07:10:42.000000000 -0500
++++ src/webkit-1.1.10/JavaScriptCore/wtf/Platform.h	2009-06-17 22:26:36.107027800 -0500
+@@ -49,6 +49,13 @@
+ #include <TargetConditionals.h>
  #endif
  
 +/* PLATFORM(CYGWIN) */
@@ -45,17 +45,17 @@
  /* PLATFORM(WIN_OS) */
  /* Operating system level dependencies for Windows that should be used */
  /* regardless of operating environment */
-@@ -91,6 +98,7 @@
+@@ -113,6 +120,7 @@
  /* Operating system level dependencies for Unix-like systems that */
  /* should be used regardless of operating environment */
  #if   PLATFORM(DARWIN)     \
 +   || PLATFORM(CYGWIN)     \
     || PLATFORM(FREEBSD)    \
     || PLATFORM(S60)        \
-    || defined(unix)        \
---- origsrc/WebKit-r39090/WebCore/plugins/PluginDatabase.cpp	2008-11-24 07:36:45.000000000 -0600
-+++ src/WebKit-r39090/WebCore/plugins/PluginDatabase.cpp	2008-12-11 14:10:32.628000000 -0600
-@@ -351,7 +351,9 @@
+    || PLATFORM(NETBSD)     \
+--- origsrc/webkit-1.1.10/WebCore/plugins/PluginDatabase.cpp	2008-11-01 14:12:05.000000000 -0500
++++ src/webkit-1.1.10/WebCore/plugins/PluginDatabase.cpp	2009-06-17 22:26:36.112027900 -0500
+@@ -351,7 +351,9 @@ void PluginDatabase::getPluginPathsInDir
      // FIXME: This should be a case insensitive set.
      HashSet<String> uniqueFilenames;
  
@@ -66,9 +66,9 @@
      String fileNameFilter("*.so");
  #else
      String fileNameFilter("");
---- origsrc/WebKit-r39090/WebKitTools/DumpRenderTree/DumpRenderTree.h	2008-11-24 07:36:57.000000000 -0600
-+++ src/WebKit-r39090/WebKitTools/DumpRenderTree/DumpRenderTree.h	2008-12-10 22:44:05.190500000 -0600
-@@ -49,7 +49,7 @@
+--- origsrc/webkit-1.1.10/WebKitTools/DumpRenderTree/DumpRenderTree.h	2009-05-13 01:45:12.000000000 -0500
++++ src/webkit-1.1.10/WebKitTools/DumpRenderTree/DumpRenderTree.h	2009-06-17 22:26:36.117028000 -0500
+@@ -46,7 +46,7 @@
  
  #include <string>
  
