@@ -1,0 +1,152 @@
+--- origsrc/webkit-1.1.11/JavaScriptCore/API/JSBase.h	2009-06-26 10:41:24.000000000 -0500
++++ src/webkit-1.1.11/JavaScriptCore/API/JSBase.h	2009-07-23 02:58:56.530589100 -0500
+@@ -67,8 +67,6 @@ typedef struct OpaqueJSValue* JSObjectRe
+ #undef JS_EXPORT
+ #if defined(BUILDING_WX__)
+     #define JS_EXPORT
+-#elif defined(__GNUC__)
+-    #define JS_EXPORT __attribute__((visibility("default")))
+ #elif defined(_WIN32_WCE)
+     #if defined(JS_BUILDING_JS)
+         #define JS_EXPORT __declspec(dllexport)
+@@ -77,7 +75,7 @@ typedef struct OpaqueJSValue* JSObjectRe
+     #else
+         #define JS_EXPORT
+     #endif
+-#elif defined(WIN32) || defined(_WIN32)
++#elif defined(WIN32) || defined(_WIN32) || defined(__CYGWIN__)
+     /*
+      * TODO: Export symbols with JS_EXPORT when using MSVC.
+      * See http://bugs.webkit.org/show_bug.cgi?id=16227
+@@ -87,6 +85,8 @@ typedef struct OpaqueJSValue* JSObjectRe
+     #else
+     #define JS_EXPORT __declspec(dllimport)
+     #endif
++#elif defined(__GNUC__)
++    #define JS_EXPORT __attribute__((visibility("default")))
+ #else
+     #define JS_EXPORT
+ #endif
+--- origsrc/webkit-1.1.11/JavaScriptCore/GNUmakefile.am	2009-07-13 07:27:38.000000000 -0500
++++ src/webkit-1.1.11/JavaScriptCore/GNUmakefile.am	2009-07-23 02:58:56.533089100 -0500
+@@ -1,4 +1,5 @@
+ javascriptcore_cppflags += \
++	-DBUILDING_JavaScriptCore \
+ 	-I$(srcdir)/JavaScriptCore \
+ 	-I$(srcdir)/JavaScriptCore/API \
+ 	-I$(srcdir)/JavaScriptCore/ForwardingHeaders \
+--- origsrc/webkit-1.1.11/JavaScriptCore/jit/JITStubs.cpp	2009-06-26 10:41:25.000000000 -0500
++++ src/webkit-1.1.11/JavaScriptCore/jit/JITStubs.cpp	2009-07-23 02:58:56.559339500 -0500
+@@ -63,7 +63,7 @@ using namespace std;
+ namespace JSC {
+ 
+ 
+-#if PLATFORM(DARWIN) || PLATFORM(WIN_OS)
++#if PLATFORM(DARWIN) || PLATFORM(WIN_OS) || PLATFORM(CYGWIN)
+ #define SYMBOL_STRING(name) "_" #name
+ #else
+ #define SYMBOL_STRING(name) #name
+--- origsrc/webkit-1.1.11/WebKit/gtk/webkit/webkitdefines.h	2009-04-24 22:58:53.000000000 -0500
++++ src/webkit-1.1.11/WebKit/gtk/webkit/webkitdefines.h	2009-07-23 02:58:56.561839500 -0500
+@@ -23,7 +23,7 @@
+ 
+ #include <glib.h>
+ 
+-#ifdef G_OS_WIN32
++#ifdef G_PLATFORM_WIN32
+     #ifdef BUILDING_WEBKIT
+         #define WEBKIT_API __declspec(dllexport)
+     #else
+--- origsrc/webkit-1.1.11/autotools/webkit.m4	2009-06-03 17:14:47.000000000 -0500
++++ src/webkit-1.1.11/autotools/webkit.m4	2009-07-23 02:58:56.564339600 -0500
+@@ -13,7 +13,7 @@ dnl check if we have the required packag
+ dnl
+ # check for -fvisibility=hidden compiler support (GCC >= 4)
+ saved_CFLAGS="$CFLAGS"
+-CFLAGS="$CFLAGS -fvisibility=hidden -fvisibility-inlines-hidden"
++CFLAGS="$CFLAGS -Werror -fvisibility=hidden -fvisibility-inlines-hidden"
+ AC_MSG_CHECKING([if ${CXX} supports -fvisibility=hidden -fvisibility-inlines-hidden])
+ AC_COMPILE_IFELSE([char foo;],
+       [ AC_MSG_RESULT([yes])
+--- origsrc/webkit-1.1.11/JavaScriptCore/config.h	2009-06-26 10:41:25.000000000 -0500
++++ src/webkit-1.1.11/JavaScriptCore/config.h	2009-07-23 02:58:56.566839600 -0500
+@@ -25,7 +25,7 @@
+ 
+ #include <wtf/Platform.h>
+ 
+-#if PLATFORM(WIN_OS) && !defined(BUILDING_WX__) && !COMPILER(GCC)
++#if (PLATFORM(WIN_OS) || PLATFORM(CYGWIN)) && !defined(BUILDING_WX__)
+ #if defined(BUILDING_JavaScriptCore) || defined(BUILDING_WTF)
+ #define JS_EXPORTDATA __declspec(dllexport)
+ #else
+@@ -35,22 +35,20 @@
+ #define JS_EXPORTDATA
+ #endif
+ 
+-#if PLATFORM(WIN_OS)
+-
++#if PLATFORM(WIN_OS) || PLATFORM(CYGWIN)
+ // If we don't define these, they get defined in windef.h. 
+ // We want to use std::min and std::max
+ #define max max
+ #define min min
++#endif
+ 
+-#if !COMPILER(MSVC7) && !PLATFORM(WINCE)
++#if PLATFORM(WIN_OS) && !COMPILER(MSVC7) && !PLATFORM(WINCE)
+ // We need to define this before the first #include of stdlib.h or it won't contain rand_s.
+ #ifndef _CRT_RAND_S
+ #define _CRT_RAND_S
+ #endif
+ #endif
+ 
+-#endif
+-
+ #if PLATFORM(FREEBSD) || PLATFORM(OPENBSD)
+ #define HAVE_PTHREAD_NP_H 1
+ #endif
+--- origsrc/webkit-1.1.11/WebCore/config.h	2009-06-26 10:41:26.000000000 -0500
++++ src/webkit-1.1.11/WebCore/config.h	2009-07-23 02:58:56.569339600 -0500
+@@ -24,7 +24,7 @@
+ 
+ #include <wtf/Platform.h>
+ 
+-#if PLATFORM(WIN_OS) && !defined(BUILDING_WX__) && !COMPILER(GCC)
++#if (PLATFORM(WIN_OS) || PLATFORM(CYGWIN)) && !defined(BUILDING_WX__)
+ #if defined(BUILDING_JavaScriptCore) || defined(BUILDING_WTF)
+ #define JS_EXPORTDATA __declspec(dllexport)
+ #else
+@@ -46,6 +46,17 @@
+ #define HAVE_FUNC_USLEEP 1
+ #endif /* __APPLE__ */
+ 
++#if PLATFORM(WIN_OS) || PLATFORM(CYGWIN)
++// If we don't define these, they get defined in windef.h.
++// We want to use std::min and std::max.
++#ifndef max
++#define max max
++#endif
++#ifndef min
++#define min min
++#endif
++#endif
++
+ #if PLATFORM(WIN_OS)
+ 
+ #ifndef _WIN32_WINNT
+@@ -56,15 +67,6 @@
+ #define WINVER 0x0500
+ #endif
+ 
+-// If we don't define these, they get defined in windef.h.
+-// We want to use std::min and std::max.
+-#ifndef max
+-#define max max
+-#endif
+-#ifndef min
+-#define min min
+-#endif
+-
+ // CURL needs winsock, so don't prevent inclusion of it
+ #if !USE(CURL)
+ #ifndef _WINSOCKAPI_
