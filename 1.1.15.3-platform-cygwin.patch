@@ -9,26 +9,6 @@
  /*!
  @typedef JSChar
  @abstract A Unicode character.
---- origsrc/webkit-1.1.10/JavaScriptCore/wtf/DateMath.h	2009-06-09 07:10:42.000000000 -0500
-+++ src/webkit-1.1.10/JavaScriptCore/wtf/DateMath.h	2009-06-17 22:26:36.094527600 -0500
-@@ -109,7 +109,7 @@ struct GregorianDateTime : Noncopyable {
-         , year(inTm.tm_year)
-         , isDST(inTm.tm_isdst)
-     {
--#if !PLATFORM(WIN_OS) && !PLATFORM(SOLARIS) && !COMPILER(RVCT)
-+#if !PLATFORM(WIN_OS) && !PLATFORM(SOLARIS) && !PLATFORM(CYGWIN) && !COMPILER(RVCT)
-         utcOffset = static_cast<int>(inTm.tm_gmtoff);
- 
-         int inZoneSize = strlen(inTm.tm_zone) + 1;
-@@ -136,7 +136,7 @@ struct GregorianDateTime : Noncopyable {
-         ret.tm_year  =  year;
-         ret.tm_isdst =  isDST;
- 
--#if !PLATFORM(WIN_OS) && !PLATFORM(SOLARIS) && !COMPILER(RVCT)
-+#if !PLATFORM(WIN_OS) && !PLATFORM(SOLARIS) && !PLATFORM(CYGWIN) && !COMPILER(RVCT)
-         ret.tm_gmtoff = static_cast<long>(utcOffset);
-         ret.tm_zone = timeZone;
- #endif
 --- origsrc/webkit-1.1.10/JavaScriptCore/wtf/Platform.h	2009-06-09 07:10:42.000000000 -0500
 +++ src/webkit-1.1.10/JavaScriptCore/wtf/Platform.h	2009-06-17 22:26:36.107027800 -0500
 @@ -49,6 +49,13 @@
@@ -53,6 +33,15 @@
     || PLATFORM(FREEBSD)    \
     || PLATFORM(S60)        \
     || PLATFORM(NETBSD)     \
+@@ -481,7 +481,7 @@
+ #define HAVE_SIGNAL_H 1
+ #endif
+ 
+-#if !PLATFORM(WIN_OS) && !PLATFORM(SOLARIS) && !PLATFORM(QNX) \
++#if !PLATFORM(WIN_OS) && !PLATFORM(CYGWIN) && !PLATFORM(SOLARIS) && !PLATFORM(QNX) \
+     && !PLATFORM(SYMBIAN) && !PLATFORM(HAIKU) && !COMPILER(RVCT)
+ #define HAVE_TM_GMTOFF 1
+ #define HAVE_TM_ZONE 1
 --- origsrc/webkit-1.1.10/WebCore/plugins/PluginDatabase.cpp	2008-11-01 14:12:05.000000000 -0500
 +++ src/webkit-1.1.10/WebCore/plugins/PluginDatabase.cpp	2009-06-17 22:26:36.112027900 -0500
 @@ -351,7 +351,9 @@ void PluginDatabase::getPluginPathsInDir

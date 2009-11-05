@@ -1,5 +1,5 @@
 category: Gnome Web
-requires: libatk1.0_0 libcairo2 libenchant1 libfontconfig1 libfreetype6 libgcc1 libglib2.0_0 libgstreamer0.10_0 libgstvideo0.10_0 libgtk2.0_0 libicu38 libintl8 libjpeg62 libpango1.0_0 libpng12 libsoup2.4_1 libsqlite3_0 libstdc++6 libwebkit1.0-common libX11_6 libxml2 libxslt libXt6
+requires: libatk1.0_0 libcairo2 libenchant1 libfontconfig1 libfreetype6 libgailutil18 libgcc1 libglib2.0_0 libgstpbutils0.10_0 libgstreamer0.10_0 libgstvideo0.10_0 libgtk2.0_0 libicu38 libintl8 libjpeg7 libpango1.0_0 libpng12 libsoup2.4_1 libsqlite3_0 libstdc++6 libwebkit1.0-common libX11_6 libxml2 libxslt libXt6
 external-source: webkit1.0
 sdesc: "GTK+ web browser engine (runtime)"
 ldesc: "WebKit is an open source web browser engine. WebKit's HTML and 
