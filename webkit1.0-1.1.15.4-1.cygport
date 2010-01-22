@@ -25,7 +25,7 @@ libwebkit1_0_common_CONTENTS="--exclude=gtk-doc usr/share/"
 libwebkit1_0_devel_CONTENTS="usr/include/ usr/lib/lib* usr/lib/pkgconfig/ usr/share/gtk-doc/"
 
 ACLOCAL_FLAGS="-I autotools"
-CYGCONF_ARGS="--with-target=x11 --enable-gtk-doc --disable-jit"
+CYGCONF_ARGS="--with-target=x11 --enable-gtk-doc"
 
 src_compile() {
 	cd ${S}
