@@ -1,0 +1,11 @@
+--- origsrc/webkit-1.2.1/autotools/webkit.m4	2010-05-07 09:09:10.000000000 -0500
++++ src/webkit-1.2.1/autotools/webkit.m4	2010-06-15 18:59:23.832423200 -0500
+@@ -29,7 +29,7 @@ AC_REQUIRE([INIT_C_CXX_FLAGS])
+ 
+ # check for -fvisibility=hidden compiler support (GCC >= 4)
+ saved_CFLAGS="$CFLAGS"
+-CFLAGS="$CFLAGS -fvisibility=hidden -fvisibility-inlines-hidden"
++CFLAGS="$CFLAGS -Werror -fvisibility=hidden -fvisibility-inlines-hidden"
+ AC_MSG_CHECKING([if ${CXX} supports -fvisibility=hidden -fvisibility-inlines-hidden])
+ AC_COMPILE_IFELSE([char foo;],
+       [ AC_MSG_RESULT([yes])

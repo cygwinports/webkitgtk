@@ -1,0 +1,39 @@
+--- origsrc/webkit-1.2.1/JavaScriptCore/API/JSBase.h	2010-03-19 10:20:53.000000000 -0500
++++ src/webkit-1.2.1/JavaScriptCore/API/JSBase.h	2010-06-15 18:57:30.676951100 -0500
+@@ -67,14 +67,14 @@ typedef struct OpaqueJSValue* JSObjectRe
+ #undef JS_EXPORT
+ #if defined(JS_NO_EXPORT)
+     #define JS_EXPORT
+-#elif defined(__GNUC__) && !defined(__CC_ARM) && !defined(__ARMCC__)
+-    #define JS_EXPORT __attribute__((visibility("default")))
+-#elif defined(WIN32) || defined(_WIN32) || defined(_WIN32_WCE)
++#elif defined(WIN32) || defined(_WIN32) || defined(_WIN32_WCE) || defined(__CYGWIN__)
+     #if defined(BUILDING_JavaScriptCore) || defined(BUILDING_WTF)
+         #define JS_EXPORT __declspec(dllexport)
+     #else
+         #define JS_EXPORT __declspec(dllimport)
+     #endif
++#elif defined(__GNUC__) && !defined(__CC_ARM) && !defined(__ARMCC__)
++    #define JS_EXPORT __attribute__((visibility("default")))
+ #else
+     #define JS_EXPORT
+ #endif
+--- origsrc/webkit-1.2.1/JavaScriptCore/GNUmakefile.am	2010-05-07 09:09:08.000000000 -0500
++++ src/webkit-1.2.1/JavaScriptCore/GNUmakefile.am	2010-06-15 18:58:02.949797000 -0500
+@@ -1,4 +1,5 @@
+ javascriptcore_cppflags += \
++	-DBUILDING_JavaScriptCore \
+ 	-I$(srcdir)/JavaScriptCore \
+ 	-I$(srcdir)/JavaScriptCore/API \
+ 	-I$(srcdir)/JavaScriptCore/ForwardingHeaders \
+--- origsrc/webkit-1.2.1/WebKit/gtk/webkit/webkitdefines.h	2010-03-19 10:20:54.000000000 -0500
++++ src/webkit-1.2.1/WebKit/gtk/webkit/webkitdefines.h	2010-06-15 18:58:50.823535200 -0500
+@@ -23,7 +23,7 @@
+ 
+ #include <glib.h>
+ 
+-#ifdef G_OS_WIN32
++#ifdef G_PLATFORM_WIN32
+     #ifdef BUILDING_WEBKIT
+         #define WEBKIT_API __declspec(dllexport)
+     #else
