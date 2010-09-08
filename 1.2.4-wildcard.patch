@@ -9,14 +9,18 @@
  
  # END WEBKIT GTK+
  
---- origsrc/webkit-1.2.1/WebCore/GNUmakefile.am	2010-05-07 10:03:21.000000000 -0500
-+++ src/webkit-1.2.1/WebCore/GNUmakefile.am	2010-06-15 18:55:20.058480100 -0500
-@@ -3768,12 +3768,12 @@ webcore_dist += \
+--- origsrc/webkit-1.2.4/WebCore/GNUmakefile.am
++++ src/webkit-1.2.4/WebCore/GNUmakefile.am
+@@ -3772,14 +3772,14 @@ webcore_dist += \
  webinspectordir = ${datadir}/webkit-1.0/webinspector
  dist_webinspector_DATA = \
  	$(WebCore)/English.lproj/localizedStrings.js \
--	$(shell ls $(WebCore)/inspector/front-end/*.{js,html,css})
-+	$(wildcard $(WebCore)/inspector/front-end/*.{js,html,css})
+-	$(shell ls $(WebCore)/inspector/front-end/*.js) \
+-	$(shell ls $(WebCore)/inspector/front-end/*.html) \
+-	$(shell ls $(WebCore)/inspector/front-end/*.css)
++	$(wildcard $(WebCore)/inspector/front-end/*.js) \
++	$(wildcard $(WebCore)/inspector/front-end/*.html) \
++	$(wildcard $(WebCore)/inspector/front-end/*.css)
  
  webinspectorimagesdir = ${datadir}/webkit-1.0/webinspector/Images
  dist_webinspectorimages_DATA = \
