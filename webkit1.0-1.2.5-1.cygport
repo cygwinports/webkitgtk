@@ -18,6 +18,7 @@ PATCH_URI="
 "
 
 DISTCLEANFILES="WebKit/gtk/po/*.mo"
+DIFF_EXCLUDES="*.po"
 
 PKG_NAMES="${PN} jsc lib${PN}_2 lib${PN}-common lib${PN}-devel girepository-WebKit1.0"
 jsc_CONTENTS="usr/bin/jsc.exe"
