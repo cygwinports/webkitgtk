@@ -15,6 +15,7 @@ PATCH_URI="
 	1.2.1-introspection-build.patch
 	1.2.1-visibility.patch
 	1.2.4-wildcard.patch
+	1.2.5-introspection-gir12.patch
 "
 
 DISTCLEANFILES="WebKit/gtk/po/*.mo"
