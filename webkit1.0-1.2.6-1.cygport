@@ -21,7 +21,7 @@ PATCH_URI="
 DISTCLEANFILES="WebKit/gtk/po/*.mo"
 DIFF_EXCLUDES="*.po"
 
-PKG_NAMES="${PN} jsc lib${PN}_2 lib${PN}-common lib${PN}-devel girepository-WebKit1.0"
+PKG_NAMES="jsc lib${PN}_2 lib${PN}-common lib${PN}-devel girepository-WebKit1.0"
 jsc_CONTENTS="usr/bin/jsc.exe"
 libwebkit1_0_2_CONTENTS="usr/bin/cygwebkit-1.0-2.dll"
 libwebkit1_0_common_CONTENTS="--exclude=gir-1.0 --exclude=gtk-doc usr/share/"
