@@ -1,0 +1,22 @@
+--- origsrc/webkit-1.3.12/Source/WebKit/gtk/GNUmakefile.am	2011-02-21 04:18:53.000000000 -0600
++++ src/webkit-1.3.12/Source/WebKit/gtk/GNUmakefile.am	2011-03-06 17:05:44.645220800 -0600
+@@ -262,7 +262,7 @@ $(WEBKIT_GIRSOURCES): $(G_IR_SCANNER) $(
+ 	     --include=Gtk-@GTK_API_VERSION@ \
+ 	     --include=JSCore-@WEBKITGTK_API_VERSION@ \
+ 	     --include=Soup-2.4 \
+-	     --library=webkitgtk-@WEBKITGTK_API_VERSION@ \
++	     --library=libwebkitgtk-@WEBKITGTK_API_VERSION@.la \
+ 	     --libtool="$(LIBTOOL)" \
+ 	     --pkg=gobject-2.0 \
+ 	     --pkg=gtk+-@GTK_API_VERSION@ \
+--- origsrc/webkit-1.3.12/Source/WebKit/gtk/JSCore.gir.in	2011-01-17 03:26:35.000000000 -0600
++++ src/webkit-1.3.12/Source/WebKit/gtk/JSCore.gir.in	2011-03-07 04:50:26.359844600 -0600
+@@ -2,7 +2,7 @@
+ <repository version="1.2"
+             xmlns="http://www.gtk.org/introspection/core/1.0"
+             xmlns:c="http://www.gtk.org/introspection/c/1.0">
+-  <namespace name="JSCore" version="@WEBKITGTK_API_VERSION@" shared-library="webkitgtk-@WEBKITGTK_API_VERSION@">
++  <namespace name="JSCore" version="@WEBKITGTK_API_VERSION@" shared-library="cygwebkitgtk-@WEBKITGTK_API_VERSION@-0.dll">
+     <alias name="GlobalContextRef" target="none">
+       <type name="JSGlobalContextRef" c:type="JSGlobalContextRef"/>
+     </alias>

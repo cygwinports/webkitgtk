@@ -1,5 +1,5 @@
---- origsrc/webkit-1.1.3/autotools/dolt.m4	2009-01-31 09:10:45.000000000 -0600
-+++ src/webkit-1.1.3/autotools/dolt.m4	2009-03-29 00:19:54.484375000 -0500
+--- origsrc/webkit-1.1.3/Source/autotools/dolt.m4
++++ src/webkit-1.1.3/Source/autotools/dolt.m4
 @@ -29,7 +29,7 @@ i?86-*-linux*|x86_64-*-linux*|powerpc-*-
  i?86-apple-darwin*)
      pic_options='-fno-common'

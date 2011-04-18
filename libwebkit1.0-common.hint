@@ -1,6 +1,0 @@
-category: Gnome Web
-external-source: webkit1.0
-sdesc: "GTK+ web browser engine (runtime data)"
-ldesc: "WebKit is an open source web browser engine. WebKit's HTML and 
-JavaScript code began as a branch of the KHTML and KJS libraries from 
-KDE."
