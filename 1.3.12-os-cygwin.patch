@@ -87,46 +87,6 @@
  #define HAVE_TM_GMTOFF 1
  #define HAVE_TM_ZONE 1
  #define HAVE_TIMEGM 1
---- origsrc/webkit-1.3.12/Source/JavaScriptCore/wtf/StackBounds.cpp	2011-01-27 02:41:52.000000000 -0600
-+++ src/webkit-1.3.12/Source/JavaScriptCore/wtf/StackBounds.cpp	2011-03-06 17:00:34.501080000 -0600
-@@ -27,8 +27,9 @@
- #include <mach/thread_act.h>
- #include <pthread.h>
- 
--#elif OS(WINDOWS)
-+#elif OS(WINDOWS) || OS(CYGWIN)
- 
-+#define WIN32_LEAN_AND_MEAN
- #include <windows.h>
- 
- #elif OS(HAIKU)
-@@ -65,7 +66,7 @@ namespace WTF {
- //     WINDOWS, SOLARIS, OPENBSD, HAIKU, WINCE
- //
- // FIXME: remove this! - this code unsafely guesses at stack sizes!
--#if OS(WINDOWS) || OS(SOLARIS) || OS(OPENBSD) || OS(HAIKU)
-+#if OS(WINDOWS) || OS(SOLARIS) || OS(OPENBSD) || OS(HAIKU) || OS(CYGWIN)
- // Based on the current limit used by the JSC parser, guess the stack size.
- static const ptrdiff_t estimatedStackSize = 128 * sizeof(void*) * 1024;
- // This method assumes the stack is growing downwards.
-@@ -152,7 +153,7 @@ void StackBounds::initialize()
-     m_bound = estimateStackBound(m_origin);
- }
- 
--#elif OS(UNIX)
-+#elif OS(UNIX) && !OS(CYGWIN)
- 
- void StackBounds::initialize()
- {
-@@ -247,7 +248,7 @@ void StackBounds::initialize()
-     m_bound = isGrowingDownward ? lowerStackBound : upperStackBound;
- }
- 
--#elif OS(WINDOWS)
-+#elif OS(WINDOWS) || OS(CYGWIN)
- 
- void StackBounds::initialize()
- {
 --- origsrc/webkit-1.3.12/Source/WebCore/plugins/PluginDatabase.cpp	2011-01-12 08:40:53.000000000 -0600
 +++ src/webkit-1.3.12/Source/WebCore/plugins/PluginDatabase.cpp	2011-03-06 17:09:35.728423700 -0600
 @@ -445,7 +445,9 @@ void PluginDatabase::getPluginPathsInDir
