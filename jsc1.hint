@@ -1,5 +1,5 @@
-category: Gnome Web
-requires: libgcc1 libglib2.0_0 libicu45 libstdc++6
+category: Gnome Interpreters
+requires: libjavascriptcoregtk1.0_0 libstdc++6
 external-source: webkit1.0
 sdesc: "WebKit JavaScript interpreter"
 ldesc: "WebKit is an open source web browser engine. WebKit's HTML and 

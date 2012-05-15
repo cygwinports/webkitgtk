@@ -1,0 +1,256 @@
+--- origsrc/webkit-1.8.1/configure.ac	2012-05-13 08:42:38.941446300 -0500
++++ src/webkit-1.8.1/configure.ac	2012-05-13 08:40:53.000000000 -0500
+@@ -47,10 +47,16 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_R
+ # TODO: move these to webkit.m4?
+ AC_MSG_CHECKING([for native Win32])
+ case "$host" in
++     *-*-cygwin*)
++       platform_win32=yes
++       os_win32=no
++       ;;
+      *-*-mingw*)
++       platform_win32=yes
+        os_win32=yes
+        ;;
+      *)
++       platform_win32=no
+        os_win32=no
+        ;;
+ esac
+@@ -1279,6 +1285,7 @@ AC_SUBST(GTK2_LIBS)
+ GTK_DOC_CHECK([1.10])
+ 
+ # OS conditionals
++AM_CONDITIONAL([PLATFORM_WIN32],[test "$platform_win32" = "yes"])
+ AM_CONDITIONAL([OS_WIN32],[test "$os_win32" = "yes"])
+ AM_CONDITIONAL([OS_UNIX],[test "$os_win32" = "no"])
+ AM_CONDITIONAL([OS_LINUX],[test "$os_linux" = "yes"])
+--- origsrc/webkit-1.8.1/GNUmakefile.am	2012-05-13 08:42:38.866442000 -0500
++++ src/webkit-1.8.1/GNUmakefile.am	2012-05-13 08:40:52.000000000 -0500
+@@ -131,7 +131,7 @@ global_cxxflags += \
+ 
+ # -no-undefined required for building DLLs on Windows
+ # It breaks the build on other platforms, so we use it conditionally
+-if OS_WIN32
++if PLATFORM_WIN32
+ no_undefined = -no-undefined
+ version_script = -export-symbols-regex "^(webkit_|k?JS).*"
+ endif
+--- origsrc/webkit-1.8.1/Source/JavaScriptCore/API/JSStringRef.h	2012-05-13 08:42:38.870442300 -0500
++++ src/webkit-1.8.1/Source/JavaScriptCore/API/JSStringRef.h	2012-05-13 08:40:52.000000000 -0500
+@@ -37,7 +37,7 @@
+ extern "C" {
+ #endif
+ 
+-#if !defined(WIN32) && !defined(_WIN32) \
++#if !defined(WIN32) && !defined(_WIN32) && !defined(__CYGWIN__) \
+     && !((defined(__CC_ARM) || defined(__ARMCC__)) && !defined(__linux__)) /* RVCT */
+ /*!
+ @typedef JSChar
+--- origsrc/webkit-1.8.1/Source/JavaScriptCore/icu/unicode/platform.h	2012-05-13 08:42:38.873442400 -0500
++++ src/webkit-1.8.1/Source/JavaScriptCore/icu/unicode/platform.h	2012-05-13 08:40:52.000000000 -0500
+@@ -210,7 +210,11 @@ typedef unsigned int uint32_t;
+ /*===========================================================================*/
+ 
+ #define U_HAVE_WCHAR_H      1
++#if defined(__CYGWIN__)
++#define U_SIZEOF_WCHAR_T    2
++#else
+ #define U_SIZEOF_WCHAR_T    4
++#endif
+ 
+ #define U_HAVE_WCSCPY       1
+ 
+--- origsrc/webkit-1.8.1/Source/JavaScriptCore/icu/unicode/umachine.h	2012-05-13 08:42:38.875442600 -0500
++++ src/webkit-1.8.1/Source/JavaScriptCore/icu/unicode/umachine.h	2012-05-13 08:40:52.000000000 -0500
+@@ -298,7 +298,7 @@ typedef int8_t UBool;
+ #       if (U_SIZEOF_WCHAR_T==4)
+ #           define U_WCHAR_IS_UTF32
+ #       endif
+-#   elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
++#   elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64) || defined(__CYGWIN__)
+ #       define U_WCHAR_IS_UTF16    
+ #   endif
+ #endif
+--- origsrc/webkit-1.8.1/Source/JavaScriptCore/jit/JITStubs.h	2012-05-13 08:42:38.882443000 -0500
++++ src/webkit-1.8.1/Source/JavaScriptCore/jit/JITStubs.h	2012-05-13 08:40:52.000000000 -0500
+@@ -119,10 +119,10 @@ namespace JSC {
+         ReturnAddressPtr* returnAddressSlot() { return reinterpret_cast<ReturnAddressPtr*>(this) - 1; }
+     };
+ #elif CPU(X86)
+-#if COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC))
++#if COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC)) || OS(CYGWIN)
+ #pragma pack(push)
+ #pragma pack(4)
+-#endif // COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC))
++#endif // COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC)) || OS(CYGWIN)
+     struct JITStackFrame {
+         void* reserved; // Unused
+         JITStubArg args[6];
+@@ -146,9 +146,9 @@ namespace JSC {
+         // When JIT code makes a call, it pushes its return address just below the rest of the stack.
+         ReturnAddressPtr* returnAddressSlot() { return reinterpret_cast<ReturnAddressPtr*>(this) - 1; }
+     };
+-#if COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC))
++#if COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC)) || OS(CYGWIN)
+ #pragma pack(pop)
+-#endif // COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC))
++#endif // COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC)) || OS(CYGWIN)
+ #elif CPU(ARM_THUMB2)
+     struct JITStackFrame {
+         JITStubArg reserved; // Unused
+--- origsrc/webkit-1.8.1/Source/JavaScriptCore/wtf/InlineASM.h	2012-05-13 08:42:38.878442700 -0500
++++ src/webkit-1.8.1/Source/JavaScriptCore/wtf/InlineASM.h	2012-05-13 08:40:52.000000000 -0500
+@@ -30,7 +30,7 @@
+ 
+ /* asm directive helpers */ 
+ 
+-#if OS(DARWIN) || (OS(WINDOWS) && CPU(X86))
++#if OS(DARWIN) || ((OS(CYGWIN) || OS(WINDOWS)) && CPU(X86))
+ #define SYMBOL_STRING(name) "_" #name
+ #else
+ #define SYMBOL_STRING(name) #name
+@@ -44,7 +44,7 @@
+ 
+ #if (OS(LINUX) || OS(FREEBSD)) && CPU(X86_64)
+ #define SYMBOL_STRING_RELOCATION(name) #name "@plt"
+-#elif OS(DARWIN) || (CPU(X86_64) && COMPILER(MINGW) && !GCC_VERSION_AT_LEAST(4, 5, 0))
++#elif OS(DARWIN) || (OS(CYGWIN) && CPU(X86)) || (CPU(X86_64) && COMPILER(MINGW) && !GCC_VERSION_AT_LEAST(4, 5, 0))
+ #define SYMBOL_STRING_RELOCATION(name) "_" #name
+ #elif CPU(X86) && COMPILER(MINGW)
+ #define SYMBOL_STRING_RELOCATION(name) "@" #name "@4"
+--- origsrc/webkit-1.8.1/Source/JavaScriptCore/wtf/PageAllocationAligned.cpp	2012-04-23 20:38:21.000000000 -0500
++++ src/webkit-1.8.1/Source/JavaScriptCore/wtf/PageAllocationAligned.cpp	2012-05-13 08:44:13.688865600 -0500
+@@ -50,7 +50,7 @@ PageAllocationAligned PageAllocationAlig
+     vm_map(current_task(), &address, size, alignmentMask, flags, MEMORY_OBJECT_NULL, 0, FALSE, protection, PROT_READ | PROT_WRITE | PROT_EXEC, VM_INHERIT_DEFAULT);
+     return PageAllocationAligned(reinterpret_cast<void*>(address), size);
+ #else
+-    size_t alignmentDelta = alignment - pageSize();
++    size_t alignmentDelta = abs(alignment - pageSize());
+ 
+     // Resererve with suffcient additional VM to correctly align.
+     size_t reservationSize = size + alignmentDelta;
+--- origsrc/webkit-1.8.1/Source/JavaScriptCore/wtf/Platform.h	2012-05-13 08:42:38.886443200 -0500
++++ src/webkit-1.8.1/Source/JavaScriptCore/wtf/Platform.h	2012-05-13 08:40:52.000000000 -0500
+@@ -312,6 +312,11 @@
+ #define WTF_OS_AIX 1
+ #endif
+ 
++/* OS(CYGWIN) - Cygwin */
++#ifdef __CYGWIN__
++#define WTF_OS_CYGWIN 1
++#endif
++
+ /* OS(DARWIN) - Any Darwin-based OS, including Mac OS X and iPhone OS */
+ #ifdef __APPLE__
+ #define WTF_OS_DARWIN 1
+@@ -397,6 +402,7 @@
+ /* OS(UNIX) - Any Unix-like system */
+ #if   OS(AIX)              \
+     || OS(ANDROID)          \
++    || OS(CYGWIN)           \
+     || OS(DARWIN)           \
+     || OS(FREEBSD)          \
+     || OS(HURD)             \
+@@ -683,6 +689,7 @@
+ 
+ #if !OS(WINDOWS) && !OS(SOLARIS) \
+     && !OS(RVCT) \
++    && !OS(CYGWIN) \
+     && !OS(ANDROID)
+ #define HAVE_TM_GMTOFF 1
+ #define HAVE_TM_ZONE 1
+--- origsrc/webkit-1.8.1/Source/JavaScriptCore/wtf/ThreadIdentifierDataPthreads.cpp	2012-05-13 08:42:38.890443400 -0500
++++ src/webkit-1.8.1/Source/JavaScriptCore/wtf/ThreadIdentifierDataPthreads.cpp	2012-05-13 08:40:52.000000000 -0500
+@@ -45,7 +45,7 @@
+ 
+ namespace WTF {
+ 
+-pthread_key_t ThreadIdentifierData::m_key = PTHREAD_KEYS_MAX;
++pthread_key_t ThreadIdentifierData::m_key;
+ 
+ void clearPthreadHandleForIdentifier(ThreadIdentifier);
+ 
+--- origsrc/webkit-1.8.1/Source/ThirdParty/ANGLE/src/compiler/osinclude.h	2012-04-23 20:35:21.000000000 -0500
++++ src/webkit-1.8.1/Source/ThirdParty/ANGLE/src/compiler/osinclude.h	2012-05-13 15:23:47.374081900 -0500
+@@ -16,7 +16,7 @@
+ #define ANGLE_OS_WIN
+ #elif defined(__APPLE__) || defined(__linux__) || \
+       defined(__FreeBSD__) || defined(__OpenBSD__) || \
+-      defined(__sun) || defined(ANDROID)
++      defined(__sun) || defined(ANDROID) || defined(__CYGWIN__)
+ #define ANGLE_OS_POSIX
+ #else
+ #error Unsupported platform.
+@@ -46,6 +46,9 @@ typedef PRUintn OS_TLSIndex;
+ #elif defined(ANGLE_OS_WIN)
+ typedef DWORD OS_TLSIndex;
+ #define OS_INVALID_TLS_INDEX (TLS_OUT_OF_INDEXES)
++#elif defined(__CYGWIN__)
++typedef pthread_key_t OS_TLSIndex;
++#define OS_INVALID_TLS_INDEX NULL
+ #elif defined(ANGLE_OS_POSIX)
+ typedef unsigned int OS_TLSIndex;
+ #define OS_INVALID_TLS_INDEX 0xFFFFFFFF
+--- origsrc/webkit-1.8.1/Source/WebCore/icu/unicode/platform.h	2012-05-13 08:42:38.892443500 -0500
++++ src/webkit-1.8.1/Source/WebCore/icu/unicode/platform.h	2012-05-13 08:40:52.000000000 -0500
+@@ -210,7 +210,11 @@ typedef unsigned int uint32_t;
+ /*===========================================================================*/
+ 
+ #define U_HAVE_WCHAR_H      1
++#if defined(__CYGWIN__)
++#define U_SIZEOF_WCHAR_T    2
++#else
+ #define U_SIZEOF_WCHAR_T    4
++#endif
+ 
+ #define U_HAVE_WCSCPY       1
+ 
+--- origsrc/webkit-1.8.1/Source/WebCore/icu/unicode/umachine.h	2012-05-13 08:42:38.900444000 -0500
++++ src/webkit-1.8.1/Source/WebCore/icu/unicode/umachine.h	2012-05-13 08:40:52.000000000 -0500
+@@ -298,7 +298,7 @@ typedef int8_t UBool;
+ #       if (U_SIZEOF_WCHAR_T==4)
+ #           define U_WCHAR_IS_UTF32
+ #       endif
+-#   elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
++#   elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64) || defined(__CYGWIN__)
+ #       define U_WCHAR_IS_UTF16    
+ #   endif
+ #endif
+--- origsrc/webkit-1.8.1/Source/WebCore/plugins/PluginDatabase.cpp	2012-05-13 08:42:38.909444500 -0500
++++ src/webkit-1.8.1/Source/WebCore/plugins/PluginDatabase.cpp	2012-05-13 08:40:52.000000000 -0500
+@@ -445,7 +445,9 @@ void PluginDatabase::getPluginPathsInDir
+     // FIXME: This should be a case insensitive set.
+     HashSet<String> uniqueFilenames;
+ 
+-#if defined(XP_UNIX)
++#if defined(__CYGWIN__)
++    String fileNameFilter("*.dll");
++#elif defined(XP_UNIX)
+     String fileNameFilter("*.so");
+ #else
+     String fileNameFilter("");
+--- origsrc/webkit-1.8.1/Source/WebKit/gtk/GNUmakefile.am	2012-05-13 08:42:38.918445000 -0500
++++ src/webkit-1.8.1/Source/WebKit/gtk/GNUmakefile.am	2012-05-13 08:40:52.000000000 -0500
+@@ -286,8 +286,8 @@ $(WEBKIT_GIRSOURCES): $(G_IR_SCANNER) $(
+ 	     --include=Gtk-@GTK_API_VERSION@ \
+ 	     --include=JSCore-@WEBKITGTK_API_VERSION@ \
+ 	     --include=Soup-2.4 \
+-	     --library=webkitgtk-@WEBKITGTK_API_VERSION@ \
+-	     --library=javascriptcoregtk-@WEBKITGTK_API_VERSION@ \
++	     --library=libwebkitgtk-@WEBKITGTK_API_VERSION@.la \
++	     --library=libjavascriptcoregtk-@WEBKITGTK_API_VERSION@.la \
+ 	     --libtool="$(LIBTOOL)" \
+ 	     --pkg=gobject-2.0 \
+ 	     --pkg=gtk+-@GTK_API_VERSION@ \
+--- origsrc/webkit-1.8.1/Source/WebKit/gtk/JSCore.gir.in	2012-05-13 08:42:38.931445800 -0500
++++ src/webkit-1.8.1/Source/WebKit/gtk/JSCore.gir.in	2012-05-13 08:40:52.000000000 -0500
+@@ -2,7 +2,7 @@
+ <repository version="1.2"
+             xmlns="http://www.gtk.org/introspection/core/1.0"
+             xmlns:c="http://www.gtk.org/introspection/c/1.0">
+-  <namespace name="JSCore" version="@WEBKITGTK_API_VERSION@" shared-library="webkitgtk-@WEBKITGTK_API_VERSION@">
++  <namespace name="JSCore" version="@WEBKITGTK_API_VERSION@" shared-library="cygjavascriptcoregtk-@WEBKITGTK_API_VERSION@-0.dll">
+     <alias name="GlobalContextRef" target="none">
+       <type name="JSGlobalContextRef" c:type="JSGlobalContextRef"/>
+     </alias>
