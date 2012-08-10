@@ -1,7 +1,0 @@
-category: Gnome Interpreters
-requires: libjavascriptcoregtk1.0_0 libglib2.0-devel
-external-source: webkit1.0
-sdesc: "WebKit JavaScript engine (development)"
-ldesc: "WebKit is an open source web browser engine. WebKit's HTML and 
-JavaScript code began as a branch of the KHTML and KJS libraries from 
-KDE."

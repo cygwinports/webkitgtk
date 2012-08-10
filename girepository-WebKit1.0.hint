@@ -1,7 +1,0 @@
-category: Gnome
-requires: girepository-Gtk2.0 girepository-Soup2.4 girepository-x11 libjavascriptcoregtk1.0_0 libwebkitgtk1.0_0
-external-source: webkit1.0
-sdesc: "GTK+ web browser engine (GObject Introspection data)"
-ldesc: "WebKit is an open source web browser engine. WebKit's HTML and 
-JavaScript code began as a branch of the KHTML and KJS libraries from 
-KDE."
