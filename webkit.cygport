@@ -1,5 +1,8 @@
 inherit gnome2
 
+NAME="webkit"
+VERSION=1.8.3
+RELEASE=2
 CATEGORY="Gnome"
 SUMMARY="WebKit web browser engine"
 DESCRIPTION="WebKit is an open source web browser engine. WebKit's HTML and
