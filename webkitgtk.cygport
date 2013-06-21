@@ -81,15 +81,17 @@ src_compile() {
 	cd ${B}/gtk2
 	gnome2_configure --with-gtk=2.0 --with-gstreamer=0.10
 	mkdir -p DerivedSources/{webkit,WebCore,ANGLE,WebKit2/webkit2gtk/webkit2,InjectedBundle}
-	cygmake generate-webkit2-forwarding-headers
-	cygmake
+	# FIXME: parallel make breaks just before the libraries are linked,
+	# but this is WAY to big to use -j1
+	make ${MAKEOPTS} || cygmake -j1
 
 	mkdir -p ${B}/gtk3
 	cd ${B}/gtk3
 	gnome2_configure --with-gtk=3.0 --with-gstreamer=1.0
 	mkdir -p DerivedSources/{webkit,WebCore,ANGLE,WebKit2,InjectedBundle}
-	cygmake generate-webkit2-forwarding-headers
-	cygmake
+	# FIXME: parallel make breaks just before the libraries are linked,
+	# but this is WAY to big to use -j1
+	make ${MAKEOPTS} || cygmake -j1
 }
 
 src_install() {
