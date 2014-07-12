@@ -18,7 +18,7 @@
              xmlns="http://www.gtk.org/introspection/core/1.0"
              xmlns:c="http://www.gtk.org/introspection/c/1.0">
 -  <namespace name="JSCore" version="@WEBKITGTK_API_VERSION@" shared-library="webkitgtk-@WEBKITGTK_API_VERSION@">
-+  <namespace name="JSCore" version="@WEBKITGTK_API_VERSION@" shared-library="cygjavascriptcore-@WEBKITGTK_API_VERSION@-0.dll">
++  <namespace name="JSCore" version="@WEBKITGTK_API_VERSION@" shared-library="cygjavascriptcoregtk-@WEBKITGTK_API_VERSION@-0.dll">
      <alias name="GlobalContextRef" target="none">
        <type name="JSGlobalContextRef" c:type="JSGlobalContextRef"/>
      </alias>
