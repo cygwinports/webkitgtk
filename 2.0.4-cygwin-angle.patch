@@ -1,0 +1,21 @@
+--- origsrc/webkitgtk-2.0.4/Source/ThirdParty/ANGLE/src/compiler/osinclude.h	2013-01-21 10:37:26.000000000 -0600
++++ src/webkitgtk-2.0.4/Source/ThirdParty/ANGLE/src/compiler/osinclude.h	2014-07-04 15:53:20.588790400 -0500
+@@ -18,7 +18,7 @@
+       defined(__FreeBSD__) || defined(__OpenBSD__) || \
+       defined(__sun) || defined(ANDROID) || \
+       defined(__GLIBC__) || defined(__GNU__) || \
+-      defined(__QNX__)
++      defined(__QNX__) || defined(__CYGWIN__)
+ #define ANGLE_OS_POSIX
+ #else
+ #error Unsupported platform.
+@@ -43,6 +43,9 @@
+ #if defined(ANGLE_OS_WIN)
+ typedef DWORD OS_TLSIndex;
+ #define OS_INVALID_TLS_INDEX (TLS_OUT_OF_INDEXES)
++#elif defined(__CYGWIN__)
++typedef pthread_key_t OS_TLSIndex;
++#define OS_INVALID_TLS_INDEX (NULL)
+ #elif defined(ANGLE_OS_POSIX)
+ typedef pthread_key_t OS_TLSIndex;
+ #define OS_INVALID_TLS_INDEX (static_cast<OS_TLSIndex>(-1))

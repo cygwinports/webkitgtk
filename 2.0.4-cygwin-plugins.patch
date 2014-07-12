@@ -1,0 +1,27 @@
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/plugins/PluginDatabase.cpp	2013-07-19 02:04:11.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/plugins/PluginDatabase.cpp	2014-07-04 15:53:20.630295600 -0500
+@@ -474,7 +474,9 @@ void PluginDatabase::getPluginPathsInDir
+     // FIXME: This should be a case insensitive set.
+     HashSet<String> uniqueFilenames;
+ 
+-#if defined(XP_UNIX)
++#if defined(__CYGWIN__)
++    String fileNameFilter("*.dll");
++#elif defined(XP_UNIX)
+     String fileNameFilter("*.so");
+ #else
+     String fileNameFilter("");
+--- origsrc/webkitgtk-2.0.4/Source/WebKit2/UIProcess/Plugins/unix/PluginInfoStoreUnix.cpp	2013-07-19 02:04:19.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebKit2/UIProcess/Plugins/unix/PluginInfoStoreUnix.cpp	2014-07-04 15:53:20.646297700 -0500
+@@ -81,7 +81,11 @@ Vector<String> PluginInfoStore::pluginsD
+ Vector<String> PluginInfoStore::pluginPathsInDirectory(const String& directory)
+ {
+     Vector<String> result;
++#ifdef __CYGWIN__
++    Vector<String> pluginPaths = listDirectory(directory, String("*.dll"));
++#else
+     Vector<String> pluginPaths = listDirectory(directory, String("*.so"));
++#endif
+     Vector<String>::const_iterator end = pluginPaths.end();
+     for (Vector<String>::const_iterator it = pluginPaths.begin(); it != end; ++it) {
+         if (fileExists(*it))

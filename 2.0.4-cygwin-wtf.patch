@@ -1,0 +1,135 @@
+--- origsrc/webkitgtk-2.0.4/Source/WTF/wtf/ExportMacros.h	2013-07-19 02:03:53.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WTF/wtf/ExportMacros.h	2014-07-04 15:53:20.592290800 -0500
+@@ -38,7 +38,7 @@
+ // being local to the target being generated, and thus not subject to (e.g.) ELF
+ // symbol interposition rules.
+ 
+-#if !PLATFORM(CHROMIUM) && OS(WINDOWS)
++#if !PLATFORM(CHROMIUM) && OS(WINDOWS) || OS(CYGWIN)
+ #define HAVE_INTERNAL_VISIBILITY 1
+ #define WTF_INTERNAL
+ #elif defined(__GNUC__) && !defined(__CC_ARM) && !defined(__ARMCC__)
+--- origsrc/webkitgtk-2.0.4/Source/WTF/wtf/InlineASM.h	2012-11-28 01:52:33.000000000 -0600
++++ src/webkitgtk-2.0.4/Source/WTF/wtf/InlineASM.h	2014-07-04 15:53:20.600791900 -0500
+@@ -30,7 +30,7 @@
+ 
+ /* asm directive helpers */ 
+ 
+-#if OS(DARWIN) || (OS(WINDOWS) && CPU(X86))
++#if OS(DARWIN) || ((OS(WINDOWS) || OS(CYGWIN)) && CPU(X86))
+ #define SYMBOL_STRING(name) "_" #name
+ #else
+ #define SYMBOL_STRING(name) #name
+@@ -44,7 +44,7 @@
+ 
+ #if (OS(LINUX) || OS(FREEBSD)) && CPU(X86_64)
+ #define GLOBAL_REFERENCE(name) #name "@plt"
+-#elif CPU(X86) && COMPILER(MINGW)
++#elif CPU(X86) && (COMPILER(MINGW) || OS(CYGWIN))
+ #define GLOBAL_REFERENCE(name) "@" #name "@4"
+ #else
+ #define GLOBAL_REFERENCE(name) SYMBOL_STRING(name)
+--- origsrc/webkitgtk-2.0.4/Source/WTF/wtf/NumberOfCores.cpp	2013-07-19 02:03:53.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WTF/wtf/NumberOfCores.cpp	2014-07-04 15:53:20.604292300 -0500
+@@ -32,7 +32,7 @@
+ // data types defined in the former. See sysctl(3) and style(9).
+ #include <sys/types.h>
+ #include <sys/sysctl.h>
+-#elif OS(LINUX) || OS(AIX) || OS(SOLARIS)
++#elif OS(LINUX) || OS(AIX) || OS(SOLARIS) || OS(CYGWIN)
+ #include <unistd.h>
+ #elif OS(WINDOWS) || OS(QNX)
+ #include <wtf/UnusedParam.h>
+@@ -63,7 +63,7 @@ int numberOfProcessorCores()
+     int sysctlResult = sysctl(name, sizeof(name) / sizeof(int), &result, &length, 0, 0);
+ 
+     s_numberOfCores = sysctlResult < 0 ? defaultIfUnavailable : result;
+-#elif OS(LINUX) || OS(AIX) || OS(SOLARIS)
++#elif OS(LINUX) || OS(AIX) || OS(SOLARIS) || OS(CYGWIN)
+     long sysconfResult = sysconf(_SC_NPROCESSORS_ONLN);
+ 
+     s_numberOfCores = sysconfResult < 0 ? defaultIfUnavailable : static_cast<int>(sysconfResult);
+--- origsrc/webkitgtk-2.0.4/Source/WTF/wtf/Platform.h	2014-07-04 15:53:16.149226600 -0500
++++ src/webkitgtk-2.0.4/Source/WTF/wtf/Platform.h	2014-07-07 00:27:08.902697200 -0500
+@@ -331,6 +331,11 @@
+ #define WTF_OS_AIX 1
+ #endif
+ 
++/* OS(CYGWIN) - Cygwin */
++#ifdef __CYGWIN__
++#define WTF_OS_CYGWIN 1
++#endif
++
+ /* OS(DARWIN) - Any Darwin-based OS, including Mac OS X and iPhone OS */
+ #ifdef __APPLE__
+ #define WTF_OS_DARWIN 1
+@@ -414,6 +419,7 @@
+ /* OS(UNIX) - Any Unix-like system */
+ #if   OS(AIX)              \
+     || OS(ANDROID)          \
++    || OS(CYGWIN)           \
+     || OS(DARWIN)           \
+     || OS(FREEBSD)          \
+     || OS(HURD)             \
+@@ -900,7 +906,7 @@
+ /* Pick which allocator to use; we only need an executable allocator if the assembler is compiled in.
+    On x86-64 we use a single fixed mmap, on other platforms we mmap on demand. */
+ #if ENABLE(ASSEMBLER)
+-#if CPU(X86_64) && !OS(WINDOWS) || PLATFORM(IOS)
++#if CPU(X86_64) && !OS(WINDOWS) && !OS(CYGWIN) || PLATFORM(IOS)
+ #define ENABLE_EXECUTABLE_ALLOCATOR_FIXED 1
+ #else
+ #define ENABLE_EXECUTABLE_ALLOCATOR_DEMAND 1
+--- origsrc/webkitgtk-2.0.4/Source/WTF/wtf/ThreadIdentifierDataPthreads.cpp	2013-07-19 02:03:53.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WTF/wtf/ThreadIdentifierDataPthreads.cpp	2014-07-04 15:53:20.614293600 -0500
+@@ -45,7 +45,7 @@
+ 
+ namespace WTF {
+ 
+-pthread_key_t ThreadIdentifierData::m_key = PTHREAD_KEYS_MAX;
++pthread_key_t ThreadIdentifierData::m_key;
+ 
+ void threadDidExit(ThreadIdentifier);
+ 
+--- origsrc/webkitgtk-2.0.4/Source/WTF/wtf/gobject/GlibUtilities.cpp	2012-06-14 05:23:17.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WTF/wtf/gobject/GlibUtilities.cpp	2014-07-04 15:53:20.617294000 -0500
+@@ -28,7 +28,7 @@
+ #include <unistd.h>
+ #endif
+ 
+-#if OS(LINUX)
++#if OS(LINUX) || OS(CYGWIN)
+ CString getCurrentExecutablePath()
+ {
+     static char readLinkBuffer[PATH_MAX];
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/bindings/js/JSInspectorFrontendHostCustom.cpp	2013-07-19 02:03:59.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/bindings/js/JSInspectorFrontendHostCustom.cpp	2014-07-04 15:53:20.623794800 -0500
+@@ -55,6 +55,8 @@ JSValue JSInspectorFrontendHost::platfor
+ {
+ #if PLATFORM(MAC)
+     DEFINE_STATIC_LOCAL(const String, platform, (ASCIILiteral("mac")));
++#elif OS(CYGWIN)
++    DEFINE_STATIC_LOCAL(const String, platform, (ASCIILiteral("cygwin")));
+ #elif OS(WINDOWS)
+     DEFINE_STATIC_LOCAL(const String, platform, (ASCIILiteral("windows")));
+ #elif OS(LINUX)
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/page/NavigatorBase.cpp	2012-09-24 06:06:58.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/page/NavigatorBase.cpp	2014-07-04 15:53:20.626795200 -0500
+@@ -30,7 +30,7 @@
+ #include "NetworkStateNotifier.h"
+ #include <wtf/text/WTFString.h>
+ 
+-#if OS(LINUX)
++#if OS(LINUX) || OS(CYGWIN)
+ #include "sys/utsname.h"
+ #include <wtf/StdLibExtras.h>
+ #endif
+@@ -86,7 +86,7 @@ String NavigatorBase::appVersion() const
+ 
+ String NavigatorBase::platform() const
+ {
+-#if OS(LINUX)
++#if OS(LINUX) || OS(CYGWIN)
+     if (!String(WEBCORE_NAVIGATOR_PLATFORM).isEmpty())
+         return WEBCORE_NAVIGATOR_PLATFORM;
+     struct utsname osname;
