@@ -41,7 +41,8 @@ DIFF_EXCLUDES="*.po libtool.m4 lt*.m4 ltmain.sh"
 PKG_NAMES="jsc1 libjavascriptcoregtk1.0_0 libjavascriptcoregtk1.0-devel
            jsc3 libjavascriptcoregtk3.0_0 libjavascriptcoregtk3.0-devel
            libwebkitgtk1.0_0 libwebkitgtk1.0-devel girepository-WebKit1.0
-           libwebkitgtk3.0_0 libwebkitgtk3.0-devel girepository-WebKit3.0"
+           libwebkitgtk3.0_0 libwebkitgtk3.0-devel girepository-WebKit3.0
+           libwebkitgtk-doc"
 jsc1_SUMMARY="WebKit JavaScript interpreter"
 jsc1_CONTENTS="usr/bin/jsc-1.exe"
 jsc3_SUMMARY="WebKit JavaScript interpreter"
@@ -74,6 +75,8 @@ girepository_WebKit1_0_SUMMARY="${SUMMARY} for GTK+2 (GObject Introspection)"
 girepository_WebKit1_0_CONTENTS="usr/*/gir*/*-1.0.*"
 girepository_WebKit3_0_SUMMARY="${SUMMARY} for GTK+3 (GObject Introspection)"
 girepository_WebKit3_0_CONTENTS="usr/*/gir*/*-3.0.*"
+libwebkitgtk_doc_CATEGORY="Doc"
+libwebkitgtk_doc_CONTENTS="usr/share/gtk-doc/html/webkitgtk/"
 
 ACLOCAL_FLAGS="-I Source/autotools"
 CYGCONF_ARGS="
