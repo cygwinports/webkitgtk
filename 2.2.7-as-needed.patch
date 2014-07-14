@@ -1,0 +1,35 @@
+--- origsrc/webkitgtk-2.0.4/Tools/GNUmakefile.am	2013-07-19 02:04:22.000000000 -0500
++++ src/webkitgtk-2.0.4/Tools/GNUmakefile.am	2014-07-04 15:53:20.658299200 -0500
+@@ -261,6 +261,7 @@ endif
+ # Add MOZ_X11 only for X11 targets
+ if TARGET_X11
+ TestNetscapePlugin_libtestnetscapeplugin_la_CPPFLAGS += -DMOZ_X11
++TestNetscapePlugin_libtestnetscapeplugin_la_LIBADD = -lX11
+ endif
+ 
+ TestNetscapePlugin_libtestnetscapeplugin_la_SOURCES = \
+--- origsrc/webkitgtk-2.2.7/Tools/TestWebKitAPI/GNUmakefile.am	2013-07-19 02:04:27.000000000 -0500
++++ src/webkitgtk-2.2.7/Tools/TestWebKitAPI/GNUmakefile.am	2014-07-04 15:53:20.661299600 -0500
+@@ -292,9 +292,9 @@ Programs_TestWebKitAPI_WebCore_TestWebCo
+ Programs_TestWebKitAPI_WebCore_TestWebCore_LDADD = \
+ 	Libraries/libTestWebKitAPIMain.la \
+ 	Libraries/libgtest.la \
+-	libjavascriptcoregtk-@WEBKITGTK_API_MAJOR_VERSION@.@WEBKITGTK_API_MINOR_VERSION@.la \
+ 	libWTF.la \
+ 	WebCoreLayer.a \
++	libjavascriptcoregtk-@WEBKITGTK_API_MAJOR_VERSION@.@WEBKITGTK_API_MINOR_VERSION@.la \
+ 	$(CAIRO_LIBS) \
+ 	$(FREETYPE_LIBS) \
+ 	$(GAMEPAD_LIBS) \
+@@ -342,10 +342,10 @@ Programs_TestWebKitAPI_TestGtk_CPPFLAGS
+ Programs_TestWebKitAPI_WebCoreGtk_TestWebCoreGtk_LDADD = \
+ 	Libraries/libTestWebKitAPIMain.la \
+ 	Libraries/libgtest.la \
+-	libjavascriptcoregtk-@WEBKITGTK_API_MAJOR_VERSION@.@WEBKITGTK_API_MINOR_VERSION@.la \
+ 	libPlatformGtk.la \
+ 	libWebCore.la \
+ 	libWebCoreGtk.la \
++	libjavascriptcoregtk-@WEBKITGTK_API_MAJOR_VERSION@.@WEBKITGTK_API_MINOR_VERSION@.la \
+ 	$(FREETYPE_LIBS) \
+ 	$(GLIB_LIBS) \
+ 	$(GTK_LIBS) \

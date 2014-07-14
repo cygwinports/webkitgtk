@@ -1,0 +1,136 @@
+--- origsrc/webkitgtk-2.2.7/Source/JavaScriptCore/jit/JITStubs.h	2014-04-30 02:08:23.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/JavaScriptCore/jit/JITStubs.h	2014-07-13 12:40:12.655885500 -0500
+@@ -86,7 +86,7 @@ union JITStubArg {
+     Instruction* pc() { return static_cast<Instruction*>(asPointer); }
+ };
+     
+-#if !OS(WINDOWS) && CPU(X86_64)
++#if !OS(WINDOWS) && !OS(CYGWIN) && CPU(X86_64)
+ struct JITStackFrame {
+     void* reserved; // Unused
+     JITStubArg args[6];
+@@ -110,7 +110,7 @@ struct JITStackFrame {
+     // When JIT code makes a call, it pushes its return address just below the rest of the stack.
+     ReturnAddressPtr* returnAddressSlot() { return reinterpret_cast<ReturnAddressPtr*>(this) - 1; }
+ };
+-#elif OS(WINDOWS) && CPU(X86_64)
++#elif (OS(WINDOWS) || OS(CYGWIN)) && CPU(X86_64)
+ struct JITStackFrame {
+     void* shadow[4]; // Shadow space reserved for a callee's parameters home addresses
+     void* reserved; // Unused, also maintains the 16-bytes stack alignment
+@@ -139,10 +139,10 @@ struct JITStackFrame {
+     ReturnAddressPtr* returnAddressSlot() { return reinterpret_cast<ReturnAddressPtr*>(this) - 1; }
+ };
+ #elif CPU(X86)
+-#if COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC))
++#if COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC)) || OS(CYGWIN)
+ #pragma pack(push)
+ #pragma pack(4)
+-#endif // COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC))
++#endif // COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC)) || OS(CYGWIN)
+ struct JITStackFrame {
+     void* reserved; // Unused
+     JITStubArg args[6];
+@@ -166,9 +166,9 @@ struct JITStackFrame {
+     // When JIT code makes a call, it pushes its return address just below the rest of the stack.
+     ReturnAddressPtr* returnAddressSlot() { return reinterpret_cast<ReturnAddressPtr*>(this) - 1; }
+ };
+-#if COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC))
++#if COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC)) || OS(CYGWIN)
+ #pragma pack(pop)
+-#endif // COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC))
++#endif // COMPILER(MSVC) || (OS(WINDOWS) && COMPILER(GCC)) || OS(CYGWIN)
+ #elif CPU(ARM_THUMB2)
+ struct JITStackFrame {
+     JITStubArg reserved; // Unused
+--- origsrc/webkitgtk-2.2.7/Source/JavaScriptCore/jit/JITStubsX86_64.h	2014-07-13 12:20:46.230181300 -0500
++++ src/webkitgtk-2.2.7/Source/JavaScriptCore/jit/JITStubsX86_64.h	2014-07-13 12:38:01.731702400 -0500
+@@ -43,7 +43,7 @@
+ 
+ namespace JSC {
+ 
+-#if COMPILER(GCC) && !OS(WINDOWS)
++#if COMPILER(GCC) && !OS(WINDOWS) && !OS(CYGWIN)
+ 
+ // These ASSERTs remind you that, if you change the layout of JITStackFrame, you
+ // need to change the assembly trampolines below to match.
+@@ -289,7 +289,7 @@ SYMBOL_STRING(ctiMasmProbeTrampolineEnd)
+ );
+ #endif // USE(MASM_PROBE)
+ 
+-#elif COMPILER(GCC) && OS(WINDOWS)
++#elif COMPILER(GCC) && (OS(WINDOWS) || OS(CYGWIN))
+ 
+ // These ASSERTs remind you that, if you change the layout of JITStackFrame, you
+ // need to change the assembly trampolines below to match.
+--- origsrc/webkitgtk-2.2.7/Source/JavaScriptCore/jit/JSInterfaceJIT.h	2014-04-30 02:08:23.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/JavaScriptCore/jit/JSInterfaceJIT.h	2014-07-13 12:40:12.665885500 -0500
+@@ -56,7 +56,7 @@ namespace JSC {
+ #if CPU(X86_64)
+         static const RegisterID returnValueRegister = X86Registers::eax;
+         static const RegisterID cachedResultRegister = X86Registers::eax;
+-#if !OS(WINDOWS)
++#if !OS(WINDOWS) && !OS(CYGWIN)
+         static const RegisterID firstArgumentRegister = X86Registers::edi;
+         static const RegisterID secondArgumentRegister = X86Registers::esi;
+ #else
+--- origsrc/webkitgtk-2.2.7/Source/JavaScriptCore/jit/SlowPathCall.h	2014-04-30 02:08:23.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/JavaScriptCore/jit/SlowPathCall.h	2014-07-13 12:42:41.820094900 -0500
+@@ -53,7 +53,7 @@ public:
+         m_jit->addPtr(MacroAssembler::TrustedImm32(-8), MacroAssembler::stackPointerRegister);
+         m_jit->push(JIT::TrustedImm32(JIT::TrustedImmPtr(m_pc)));
+         m_jit->push(JIT::callFrameRegister);
+-#elif CPU(X86_64) && OS(WINDOWS)
++#elif CPU(X86_64) && (OS(WINDOWS) || OS(CYGWIN))
+         m_jit->addPtr(MacroAssembler::TrustedImm32(-16), MacroAssembler::stackPointerRegister);
+         m_jit->move(MacroAssembler::stackPointerRegister, JIT::firstArgumentRegister);
+         m_jit->move(JIT::callFrameRegister, JIT::secondArgumentRegister);
+@@ -67,7 +67,7 @@ public:
+ 
+ #if CPU(X86) && USE(JSVALUE32_64)
+         m_jit->addPtr(MacroAssembler::TrustedImm32(16), MacroAssembler::stackPointerRegister);
+-#elif CPU(X86_64) && OS(WINDOWS)
++#elif CPU(X86_64) && (OS(WINDOWS) || OS(CYGWIN))
+         m_jit->pop(JIT::regT0); // vPC
+         m_jit->pop(JIT::regT1); // callFrame register
+ #endif
+--- origsrc/webkitgtk-2.2.7/Source/JavaScriptCore/jit/ThunkGenerators.cpp	2014-04-30 02:08:23.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/JavaScriptCore/jit/ThunkGenerators.cpp	2014-07-13 12:40:12.665885500 -0500
+@@ -270,7 +270,7 @@ static MacroAssemblerCodeRef nativeForGe
+     jit.peek(JSInterfaceJIT::regT1);
+     jit.emitPutToCallFrameHeader(JSInterfaceJIT::regT1, JSStack::ReturnPC);
+ 
+-#if !OS(WINDOWS)
++#if !OS(WINDOWS) && !OS(CYGWIN)
+     // Calling convention:      f(edi, esi, edx, ecx, ...);
+     // Host function signature: f(ExecState*);
+     jit.move(JSInterfaceJIT::callFrameRegister, X86Registers::edi);
+--- origsrc/webkitgtk-2.2.7/Source/JavaScriptCore/yarr/YarrJIT.cpp	2014-04-30 02:08:23.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/JavaScriptCore/yarr/YarrJIT.cpp	2014-07-13 12:40:12.675885500 -0500
+@@ -87,7 +87,7 @@ class YarrGenerator : private MacroAssem
+     static const RegisterID returnRegister = X86Registers::eax;
+     static const RegisterID returnRegister2 = X86Registers::edx;
+ #elif CPU(X86_64)
+-#if !OS(WINDOWS)
++#if !OS(WINDOWS) && !OS(CYGWIN)
+     static const RegisterID input = X86Registers::edi;
+     static const RegisterID index = X86Registers::esi;
+     static const RegisterID length = X86Registers::edx;
+@@ -2527,7 +2527,7 @@ class YarrGenerator : private MacroAssem
+         // The ABI doesn't guarantee the upper bits are zero on unsigned arguments, so clear them ourselves.
+         zeroExtend32ToPtr(index, index);
+         zeroExtend32ToPtr(length, length);
+-#if OS(WINDOWS)
++#if OS(WINDOWS) || OS(CYGWIN)
+         if (compileMode == IncludeSubpatterns)
+             loadPtr(Address(X86Registers::ebp, 6 * sizeof(void*)), output);
+ #endif
+@@ -2569,7 +2569,7 @@ class YarrGenerator : private MacroAssem
+     void generateReturn()
+     {
+ #if CPU(X86_64)
+-#if OS(WINDOWS)
++#if OS(WINDOWS) || OS(CYGWIN)
+         // Store the return value in the allocated space pointed by rcx.
+         store64(returnRegister, Address(X86Registers::ecx));
+         store64(returnRegister2, Address(X86Registers::ecx, sizeof(void*)));

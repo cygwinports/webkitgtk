@@ -1,7 +1,7 @@
 inherit gnome2
 
 NAME="webkitgtk"
-VERSION=2.0.4
+VERSION=2.2.7
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="WebKit web browser engine"
@@ -11,32 +11,27 @@ KDE."
 HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/releases/${NAME}-${VERSION}.tar.xz"
 PATCH_URI="
-	http://pkgs.fedoraproject.org/cgit/webkitgtk3.git/plain/webkit-1.11.2-yarr.patch?h=f19
-	http://pkgs.fedoraproject.org/cgit/webkitgtk3.git/plain/webkitgtk-2.0.4-ppc64_align.patch?h=f19
-	http://pkgs.fedoraproject.org/cgit/mingw-webkitgtk.git/plain/webkitgtk-jit-win64.patch?h=f19
-	http://pkgs.fedoraproject.org/cgit/mingw-webkitgtk.git/plain/webkitgtk-jit-mingw.patch?h=f19
-	http://pkgs.fedoraproject.org/cgit/mingw-webkitgtk.git/plain/webkit-dont-build-dump-render-tree.patch?h=f19
+	http://pkgs.fedoraproject.org/cgit/webkitgtk3.git/plain/webkitgtk-2.2.7-cloop_fix.patch?h=f20
+	http://pkgs.fedoraproject.org/cgit/webkitgtk3.git/plain/webkitgtk-2.2.7-ppc64_align.patch?h=f20
+	http://pkgs.fedoraproject.org/cgit/mingw-webkitgtk.git/plain/webkit-dont-build-dump-render-tree.patch?h=f20
+	http://pkgs.fedoraproject.org/cgit/mingw-webkitgtk.git/plain/webkitgtk-mingw-use-gcc-asm.patch?h=f20
+	http://pkgs.fedoraproject.org/cgit/mingw-webkitgtk.git/plain/webkitgtk-redo-commit-148663.patch?h=f20
 	1.3.12-dolt.patch
 	2.0.4-vpath.patch
-	2.0.4-as-needed.patch
-	2.0.4-freetype25.patch
-	2.0.4-cygwin-automake.patch
+	2.2.7-as-needed.patch
+	2.2.7-debuginfo.patch
+	2.2.7-cygwin-automake.patch
 	2.0.4-cygwin-angle.patch
 	2.0.4-cygwin-arc4random.patch
-	2.0.4-cygwin-introspection.patch
-	2.0.4-cygwin-jit.patch
+	2.2.7-cygwin-introspection.patch
+	2.2.7-cygwin-jit.patch
 	2.0.4-cygwin-plugins.patch
 	2.0.4-cygwin-wchar.patch
-	2.0.4-cygwin-wtf.patch
-	2.0.4-cygwin-webkit2.patch
+	2.2.7-cygwin-wtf.patch
 "
 
 DISTCLEANFILES="Source/WebKit/gtk/po/*.mo Source/WebKit/gtk/JSCore-3.0.gir"
 DIFF_EXCLUDES="*.po libtool.m4 lt*.m4 ltmain.sh"
-
-# libwebkitgtk debuginfo is too large (objcopy bails due to insufficient memory)
-#CFLAGS+=" -ggdb1"
-#CXXFLAGS+=" -ggdb1"
 
 PKG_NAMES="jsc1 libjavascriptcoregtk1.0_0 libjavascriptcoregtk1.0-devel
            jsc3 libjavascriptcoregtk3.0_0 libjavascriptcoregtk3.0-devel
@@ -93,25 +88,19 @@ src_compile() {
 	mkdir -p ${B}/gtk2
 	cd ${B}/gtk2
 	gnome2_configure --with-gtk=2.0
-	mkdir -p DerivedSources/{webkit,WebCore,ANGLE,WebKit2,webkitdom,InjectedBundle,Platform}
+	mkdir -p DerivedSources/{webkit,WebCore,ANGLE,WebKit2,webkitdom,InjectedBundle,Platform,WebKit2/webkit2gtk/webkit2}
 	# exported symbols in libwebkitgtk MUST be limited via -export-symbols-regex
 	# flag in the build, otherwise there are too many and DLL is invalid
 	sed -i -e 's|-Wl,--export-all-symbols||g' GNUmakefile
-	# FIXME: parallel make breaks just before the libraries are linked,
-	# but this is WAY to big to use -j1
-#	make ${MAKEOPTS} || cygmake -j1
 	cygmake
 
 	mkdir -p ${B}/gtk3
 	cd ${B}/gtk3
 	gnome2_configure --with-gtk=3.0
-	mkdir -p DerivedSources/{webkit,WebCore,ANGLE,WebKit2,webkitdom,InjectedBundle,Platform}
+	mkdir -p DerivedSources/{webkit,WebCore,ANGLE,WebKit2,webkitdom,InjectedBundle,Platform,WebKit2/webkit2gtk/webkit2}
 	# exported symbols in libwebkitgtk MUST be limited via -export-symbols-regex
 	# flag in the build, otherwise there are too many and DLL is invalid
 	sed -i -e 's|-Wl,--export-all-symbols||g' GNUmakefile
-	# FIXME: parallel make breaks just before the libraries are linked,
-	# but this is WAY to big to use -j1
-#	make ${MAKEOPTS} || cygmake -j1
 	cygmake
 }
 

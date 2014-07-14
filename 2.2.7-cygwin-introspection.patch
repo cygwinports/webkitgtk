@@ -1,0 +1,37 @@
+--- origsrc/webkitgtk-2.2.7/Source/JavaScriptCore/JavaScriptCore.gir.in	2013-08-03 11:10:38.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/JavaScriptCore/JavaScriptCore.gir.in	2014-07-13 12:22:44.070356700 -0500
+@@ -3,7 +3,7 @@
+             xmlns="http://www.gtk.org/introspection/core/1.0"
+             xmlns:c="http://www.gtk.org/introspection/c/1.0">
+   <namespace name="JavaScriptCore" version="@WEBKITGTK_API_VERSION@" 
+-             shared-library="javascriptcoregtk-@WEBKITGTK_API_VERSION@"
++             shared-library="cygjavascriptcoregtk-@WEBKITGTK_API_VERSION@-0.dll"
+              c:identifier-prefixes="JS"
+              c:symbol-prefixes="JS">
+     <record name="GlobalContext" c:type="JSGlobalContextRef" foreign="1"/>
+--- origsrc/webkitgtk-2.2.7/Source/WebKit/gtk/GNUmakefile.am	2014-04-30 02:08:25.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/WebKit/gtk/GNUmakefile.am	2014-07-13 12:23:20.410406900 -0500
+@@ -301,8 +301,8 @@ WebKit-@WEBKITGTK_API_VERSION@.gir: $(G_
+ 	     --include=Gtk-@GTK_API_VERSION@ \
+ 	     --include=JavaScriptCore-@WEBKITGTK_API_VERSION@ \
+ 	     --include=Soup-2.4 \
+-	     --library=webkitgtk-@WEBKITGTK_API_VERSION@ \
+-	     --library=javascriptcoregtk-@WEBKITGTK_API_VERSION@ \
++	     --library=libwebkitgtk-@WEBKITGTK_API_VERSION@.la \
++	     --library=libjavascriptcoregtk-@WEBKITGTK_API_VERSION@.la \
+ 	     --libtool="$(LIBTOOL)" \
+ 	     --pkg=gobject-2.0 \
+ 	     --pkg=gtk+-@GTK_API_VERSION@ \
+--- origsrc/webkitgtk-2.2.7/Source/WebKit2/GNUmakefile.am	2014-07-13 12:20:46.460181600 -0500
++++ src/webkitgtk-2.2.7/Source/WebKit2/GNUmakefile.am	2014-07-13 12:23:31.160421700 -0500
+@@ -294,8 +294,8 @@ WebKit2-@WEBKITGTK_API_VERSION@.gir: $(G
+ 	     --include=Gtk-3.0 \
+ 	     --include=JavaScriptCore-@WEBKITGTK_API_VERSION@ \
+ 	     --include=Soup-2.4 \
+-	     --library=webkit2gtk-@WEBKITGTK_API_VERSION@ \
+-	     --library=javascriptcoregtk-@WEBKITGTK_API_VERSION@ \
++	     --library=libwebkit2gtk-@WEBKITGTK_API_VERSION@.la \
++	     --library=libjavascriptcoregtk-@WEBKITGTK_API_VERSION@.la \
+ 	     --libtool="$(LIBTOOL)" \
+ 	     --pkg=gobject-2.0 \
+ 	     --pkg=gtk+-@GTK_API_VERSION@ \

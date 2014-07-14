@@ -1,0 +1,58 @@
+--- origsrc/webkitgtk-2.2.7/GNUmakefile.am	2014-04-30 02:08:05.000000000 -0500
++++ src/webkitgtk-2.2.7/GNUmakefile.am	2014-07-13 12:26:04.155689500 -0500
+@@ -167,9 +167,9 @@ feature_defines := $(shell cat WebKitFea
+ 
+ # -no-undefined required for building DLLs on Windows
+ # It breaks the build on other platforms, so we use it conditionally
+-if OS_WIN32
++if PLATFORM_WIN32
+ no_undefined = -no-undefined
+-version_script = -export-symbols-regex "^(webkit_|k?JS).*"
++version_script = -export-symbols-regex "^(webkit_|k?JS|webkitWebSettingsUserAgentForURI).*"
+ endif
+ 
+ if OS_GNU
+--- origsrc/webkitgtk-2.2.7/Source/autotools/CheckSystemAndBasicDependencies.m4	2014-04-30 02:08:29.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/autotools/CheckSystemAndBasicDependencies.m4	2014-07-13 12:27:16.805789800 -0500
+@@ -1,5 +1,6 @@
+ AC_CANONICAL_HOST
+ 
++platform_win32=no
+ os_win32=no
+ os_linux=no
+ os_freebsd=no
+@@ -7,8 +8,12 @@ os_gnu=no
+ 
+ case "$host_os" in
+     mingw*)
++        platform_win32=yes
+         os_win32=yes
+         ;;
++    cygwin*)
++        platform_win32=yes
++        ;;
+     freebsd*)
+         os_freebsd=yes
+         ;;
+--- origsrc/webkitgtk-2.2.7/Source/autotools/SetupAutomake.m4	2014-04-30 02:08:29.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/autotools/SetupAutomake.m4	2014-07-13 12:27:43.906827200 -0500
+@@ -15,6 +15,7 @@ AM_CONDITIONAL([GTK_API_VERSION_2],[test
+ AM_WEBKIT_FEATURE_CONDITIONAL([ENABLE_INDEXED_DATABASE])
+ 
+ # OS conditionals.
++AM_CONDITIONAL([PLATFORM_WIN32],[test "$platform_win32" = "yes"])
+ AM_CONDITIONAL([OS_WIN32],[test "$os_win32" = "yes"])
+ AM_CONDITIONAL([OS_UNIX],[test "$os_win32" = "no"])
+ AM_CONDITIONAL([OS_LINUX],[test "$os_linux" = "yes"])
+--- origsrc/webkitgtk-2.2.7/Source/autotools/SetupCompilerFlags.m4	2014-04-30 02:08:29.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/autotools/SetupCompilerFlags.m4	2014-07-13 12:27:58.446847300 -0500
+@@ -1,7 +1,7 @@
+ # Use C99 as the language standard for C code.
+-CFLAGS="$CFLAGS -pthread -std=c99"
++CFLAGS="$CFLAGS -pthread -std=gnu99"
+ # Use the C++11 standard. Do not warn about C++11 incompatibilities.
+-CXXFLAGS="$CXXFLAGS -pthread -std=c++11 -Wno-c++11-compat"
++CXXFLAGS="$CXXFLAGS -pthread -std=gnu++11 -Wno-c++11-compat"
+ 
+ # Clang requires suppression of unused arguments warnings.
+ if test "$c_compiler" = "clang"; then

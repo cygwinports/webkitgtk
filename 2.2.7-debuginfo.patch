@@ -1,0 +1,18 @@
+--- origsrc/webkitgtk-2.2.7/Source/WebCore/GNUmakefile.am	2014-04-30 02:08:23.000000000 -0500
++++ src/webkitgtk-2.2.7/Source/WebCore/GNUmakefile.am	2014-07-13 15:18:01.928060800 -0500
+@@ -164,6 +164,7 @@ libWebCoreSVG_la_SOURCES = \
+ 	$(webcore_svg_sources)
+ 
+ libWebCoreSVG_la_CXXFLAGS = \
++	-g1 \
+ 	-fvisibility-inlines-hidden \
+ 	$(global_cxxflags)
+ 
+@@ -462,6 +463,7 @@ libWebCore_la_SOURCES = \
+ 	$(webcore_sources)
+ 
+ libWebCore_la_CXXFLAGS = \
++	-g1 \
+ 	-fvisibility-inlines-hidden \
+ 	$(global_cxxflags)
+ 
