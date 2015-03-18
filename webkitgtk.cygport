@@ -2,7 +2,7 @@ inherit gnome2
 
 NAME="webkitgtk"
 VERSION=2.0.4
-RELEASE=2
+RELEASE=3
 CATEGORY="Libs"
 SUMMARY="WebKit web browser engine"
 DESCRIPTION="WebKit is an open source web browser engine. WebKit's HTML and
@@ -36,8 +36,9 @@ DISTCLEANFILES="Source/WebKit/gtk/po/*.mo Source/WebKit/gtk/JSCore-3.0.gir"
 DIFF_EXCLUDES="*.po libtool.m4 lt*.m4 ltmain.sh"
 
 # libwebkitgtk debuginfo is too large (objcopy bails due to insufficient memory)
-#CFLAGS+=" -ggdb1"
-#CXXFLAGS+=" -ggdb1"
+RESTRICT=debuginfo
+CFLAGS+=" -g0"
+CXXFLAGS+=" -g0"
 
 PKG_NAMES="jsc1 libjavascriptcoregtk1.0_0 libjavascriptcoregtk1.0-devel
            jsc3 libjavascriptcoregtk3.0_0 libjavascriptcoregtk3.0-devel
@@ -98,9 +99,6 @@ src_compile() {
 	# exported symbols in libwebkitgtk MUST be limited via -export-symbols-regex
 	# flag in the build, otherwise there are too many and DLL is invalid
 	sed -i -e 's|-Wl,--export-all-symbols||g' GNUmakefile
-	# FIXME: parallel make breaks just before the libraries are linked,
-	# but this is WAY to big to use -j1
-#	make ${MAKEOPTS} || cygmake -j1
 	cygmake
 
 	mkdir -p ${B}/gtk3
@@ -110,9 +108,6 @@ src_compile() {
 	# exported symbols in libwebkitgtk MUST be limited via -export-symbols-regex
 	# flag in the build, otherwise there are too many and DLL is invalid
 	sed -i -e 's|-Wl,--export-all-symbols||g' GNUmakefile
-	# FIXME: parallel make breaks just before the libraries are linked,
-	# but this is WAY to big to use -j1
-#	make ${MAKEOPTS} || cygmake -j1
 	cygmake
 }
 
