@@ -2,7 +2,7 @@ inherit gnome2
 
 NAME="webkitgtk"
 VERSION=2.0.4
-RELEASE=3
+RELEASE=4
 CATEGORY="Libs"
 SUMMARY="WebKit web browser engine"
 DESCRIPTION="WebKit is an open source web browser engine. WebKit's HTML and
@@ -30,15 +30,16 @@ PATCH_URI="
 	2.0.4-cygwin-wtf.patch
 	2.0.4-cygwin-webkit2.patch
 	2.0.4-angle-bison3.patch
+	2.0.4-debuginfo.patch
 "
 
 DISTCLEANFILES="Source/WebKit/gtk/po/*.mo Source/WebKit/gtk/JSCore-3.0.gir"
 DIFF_EXCLUDES="*.po libtool.m4 lt*.m4 ltmain.sh"
 
-# libwebkitgtk debuginfo is too large (objcopy bails due to insufficient memory)
-RESTRICT=debuginfo
-CFLAGS+=" -g0"
-CXXFLAGS+=" -g0"
+# libwebkitgtk debuginfo is more than 2GiB at -g2; debuginfo patch sets
+# WebCore to -g1 and the rest to -g2 which reduces size to ~0.6GiB
+CFLAGS="-O2 -pipe"
+CXXFLAGS="-O2 -pipe"
 
 PKG_NAMES="jsc1 libjavascriptcoregtk1.0_0 libjavascriptcoregtk1.0-devel
            jsc3 libjavascriptcoregtk3.0_0 libjavascriptcoregtk3.0-devel
