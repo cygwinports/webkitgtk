@@ -22,16 +22,3 @@
      <alias name="GlobalContextRef" target="none">
        <type name="JSGlobalContextRef" c:type="JSGlobalContextRef"/>
      </alias>
---- origsrc/webkitgtk-2.0.4/Source/WebKit2/GNUmakefile.am	2013-07-19 02:04:18.000000000 -0500
-+++ src/webkitgtk-2.0.4/Source/WebKit2/GNUmakefile.am	2014-07-04 15:53:20.643297300 -0500
-@@ -228,8 +228,8 @@ WebKit2-@WEBKITGTK_API_VERSION@.gir: $(G
- 	     --include=GObject-2.0 \
- 	     --include=Gtk-3.0 \
- 	     --include=Soup-2.4 \
--	     --library=webkit2gtk-@WEBKITGTK_API_VERSION@ \
--	     --library=javascriptcoregtk-@WEBKITGTK_API_VERSION@ \
-+	     --library=libwebkit2gtk-@WEBKITGTK_API_VERSION@.la \
-+	     --library=libjavascriptcoregtk-@WEBKITGTK_API_VERSION@.la \
- 	     --libtool="$(LIBTOOL)" \
- 	     --pkg=gobject-2.0 \
- 	     --pkg=gtk+-@GTK_API_VERSION@ \
