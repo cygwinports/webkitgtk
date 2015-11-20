@@ -1,0 +1,121 @@
+These are the API changes in 2.2 which are currently in use, along with
+the corresponding changes required to keep API/ABI compatibility:
+
+r143663 Nodes should not have attributes property (WKBZ#110510)
+r154057 Move id attribute to parent Element interface (WKBZ#119706)
+r154328 [GTK] Add stubs for APIs that went missing in DOM bindings (WKBZ#120048)
+r154786 [GTK] HTMLElement lost setID and getID (WKBZ#120440)
+
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/bindings/gobject/WebKitDOMCustom.cpp	2012-09-06 08:02:28.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/bindings/gobject/WebKitDOMCustom.cpp	2015-11-19 18:17:09.011076500 -0600
+@@ -62,6 +62,16 @@ webkit_dom_html_element_set_class_name(W
+     webkit_dom_element_set_class_name(WEBKIT_DOM_ELEMENT(element), value);
+ }
+ 
++gchar* webkit_dom_html_element_get_id(WebKitDOMHTMLElement* element)
++{
++    return webkit_dom_element_get_id(WEBKIT_DOM_ELEMENT(element));
++}
++
++void webkit_dom_html_element_set_id(WebKitDOMHTMLElement* element, const gchar* value)
++{
++    webkit_dom_element_set_id(WEBKIT_DOM_ELEMENT(element), value);
++}
++
+ gboolean
+ webkit_dom_webkit_named_flow_get_overflow(WebKitDOMWebKitNamedFlow* flow)
+ {
+@@ -105,3 +115,15 @@ webkit_dom_html_form_element_dispatch_fo
+ {
+     g_warning("The onforminput functionality has been removed from the DOM spec, this function does nothing.");
+ }
++
++WebKitDOMNamedNodeMap* webkit_dom_node_get_attributes(WebKitDOMNode*)
++{
++    g_warning("%s: this functionality has been removed from WebKit, this function does nothing.", __func__);
++    return 0;
++}
++
++gboolean webkit_dom_node_has_attributes(WebKitDOMNode*)
++{
++    g_warning("%s: this functionality has been removed from WebKit, this function does nothing.", __func__);
++    return FALSE;
++}
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/bindings/gobject/WebKitDOMCustom.h	2013-07-19 02:03:59.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/bindings/gobject/WebKitDOMCustom.h	2015-11-19 18:19:47.961760700 -0600
+@@ -34,10 +34,14 @@ WEBKIT_API void webkit_dom_html_element_
+ WEBKIT_API WebKitDOMDOMTokenList* webkit_dom_html_element_get_class_list(WebKitDOMHTMLElement* element);
+ WEBKIT_API void webkit_dom_html_form_element_dispatch_form_change(WebKitDOMHTMLFormElement* self);
+ WEBKIT_API void webkit_dom_html_form_element_dispatch_form_input(WebKitDOMHTMLFormElement* self);
++WEBKIT_API gchar* webkit_dom_html_element_get_id(WebKitDOMHTMLElement* self);
++WEBKIT_API void webkit_dom_html_element_set_id(WebKitDOMHTMLElement* self, const gchar* value);
+ WEBKIT_API gboolean webkit_dom_webkit_named_flow_get_overflow(WebKitDOMWebKitNamedFlow* flow);
+ WEBKIT_API gchar* webkit_dom_element_get_webkit_region_overflow(WebKitDOMElement* element);
+ WEBKIT_API WebKitDOMNodeList* webkit_dom_webkit_named_flow_get_content_nodes(WebKitDOMWebKitNamedFlow* namedFlow);
+ WEBKIT_API WebKitDOMNodeList* webkit_dom_webkit_named_flow_get_regions_by_content_node(WebKitDOMWebKitNamedFlow* namedFlow, WebKitDOMNode* contentNode);
++WEBKIT_API WebKitDOMNamedNodeMap* webkit_dom_node_get_attributes(WebKitDOMNode* self);
++WEBKIT_API gboolean webkit_dom_node_has_attributes(WebKitDOMNode* self);
+ 
+ G_END_DECLS
+ 
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/dom/Element.idl	2013-07-19 02:04:02.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/dom/Element.idl	2015-11-19 18:09:12.272038300 -0600
+@@ -41,6 +41,9 @@
+         raises(DOMException);
+     NodeList getElementsByTagName(in [Optional=DefaultIsUndefined] DOMString name);
+ 
++    readonly attribute NamedNodeMap     attributes;
++    boolean            hasAttributes();
++
+     // DOM Level 2 Core
+ 
+     [ObjCLegacyUnnamedParameters] DOMString getAttributeNS(in [TreatNullAs=NullString,Optional=DefaultIsUndefined] DOMString namespaceURI,
+@@ -63,6 +66,9 @@
+ 
+     readonly attribute CSSStyleDeclaration style;
+ 
++    // DOM 4
++    [Reflect] attribute DOMString id;
++
+     // Common extensions
+ 
+     readonly attribute long offsetLeft;
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/dom/Node.idl	2013-07-19 02:04:02.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/dom/Node.idl	2015-11-19 18:08:39.531880900 -0600
+@@ -62,7 +62,6 @@
+     readonly attribute Node             lastChild;
+     readonly attribute Node             previousSibling;
+     readonly attribute Node             nextSibling;
+-    readonly attribute NamedNodeMap     attributes;
+     readonly attribute Document         ownerDocument;
+ 
+     [ObjCLegacyUnnamedParameters, Custom] Node insertBefore(in [CustomReturn] Node newChild,
+@@ -90,7 +89,6 @@
+                  setter raises(DOMException);
+     readonly attribute [TreatReturnedNullStringAs=Null] DOMString        localName;
+ 
+-    boolean            hasAttributes();
+ 
+     // Introduced in DOM Level 3:
+ 
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/html/HTMLElement.idl	2013-07-19 02:04:02.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/html/HTMLElement.idl	2015-11-19 18:03:16.361343400 -0600
+@@ -25,8 +25,6 @@
+     V8SkipVTableValidation
+ ] interface HTMLElement : Element {
+              // iht.com relies on id returning the empty string when no id is present. 
+-             // Other browsers do this as well. So we don't convert null to JS null.
+-             [Reflect] attribute DOMString id;
+              [Reflect] attribute DOMString title;
+              [Reflect] attribute DOMString lang;
+              attribute boolean             translate;
+--- origsrc/webkitgtk-2.0.4/Source/WebCore/svg/SVGElement.idl	2013-07-19 02:04:14.000000000 -0500
++++ src/webkitgtk-2.0.4/Source/WebCore/svg/SVGElement.idl	2015-11-19 18:03:46.458665300 -0600
+@@ -25,7 +25,6 @@
+     Conditional=SVG,
+     V8CustomToJSObject
+ ] interface SVGElement : Element {
+-    [Reflect] attribute DOMString id;
+     [TreatNullAs=NullString] attribute DOMString xmlbase setter raises(DOMException);
+     readonly attribute SVGSVGElement ownerSVGElement;
+     readonly attribute SVGElement viewportElement;
