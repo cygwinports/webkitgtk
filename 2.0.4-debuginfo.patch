@@ -14,18 +14,21 @@
  # Read the feature defines file, that's created by generate-feature-defines-files
 --- origsrc/webkitgtk-2.0.4/Source/WebCore/GNUmakefile.am	2013-07-19 02:03:56.000000000 -0500
 +++ src/webkitgtk-2.0.4/Source/WebCore/GNUmakefile.am	2015-11-19 17:57:46.025396100 -0600
-@@ -161,11 +161,9 @@ libWebCoreSVG_la_SOURCES = \
+@@ -161,12 +161,10 @@ libWebCoreSVG_la_SOURCES = \
  	$(webcore_svg_sources)
  
  libWebCoreSVG_la_CXXFLAGS = \
 -	-fvisibility-inlines-hidden \
- 	$(global_cxxflags)
+-	$(global_cxxflags)
++	$(global_cxxflags) -g1
  
  libWebCoreSVG_la_CFLAGS = \
 -	-fvisibility=hidden \
- 	$(global_cflags)
+-	$(global_cflags)
++	$(global_cflags) -g1
  
  libWebCoreSVG_la_CPPFLAGS = \
+ 	-DBUILDING_WebCore \
 @@ -463,12 +461,10 @@ libWebCore_la_SOURCES = \
  	$(webcore_sources)
  
